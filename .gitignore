@@ -1,0 +1,19 @@
+# Dependências e saídas do Next.js
+node_modules/
+.next/
+out/
+coverage/
+playwright-report/
+test-results/
+
+# Configurações locais e segredos
+.env
+.env.local
+.env.*.local
+
+# Arquivos do ambiente de desenvolvimento
+.superpowers/
+.vercel/
+*.log
+.DS_Store
+Thumbs.db
