@@ -10,10 +10,14 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:rls": "node --env-file=.env.local scripts/validar-rls.mjs",
+    "admin:create": "node --env-file=.env.local scripts/criar-primeiro-administrador.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "latest",
+    "@supabase/ssr": "^0.12.5",
+    "@supabase/supabase-js": "^2.112.4",
     "class-variance-authority": "latest",
     "clsx": "latest",
     "lucide-react": "latest",
@@ -21,6 +25,7 @@
     "react": "latest",
     "react-dom": "latest",
     "react-hook-form": "latest",
+    "server-only": "^0.0.1",
     "tailwind-merge": "latest",
     "zod": "latest"
   },

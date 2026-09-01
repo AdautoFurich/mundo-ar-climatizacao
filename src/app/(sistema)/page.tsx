@@ -12,6 +12,7 @@ import {
 
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
+import { requireUser } from "@/lib/auth/guards";
 import { cn } from "@/lib/utils";
 
 const metrics = [
@@ -113,9 +114,11 @@ function MetricCard({
   );
 }
 
-export default function Home() {
+export default async function Home() {
+  const user = await requireUser();
+
   return (
-    <AppShell>
+    <AppShell currentPath="/" user={user}>
       <div className="technical-grid min-h-[calc(100vh-4rem)] px-4 py-6 sm:px-6 lg:px-8 lg:py-8">
         <div className="mx-auto max-w-[90rem]">
           <section className="flex flex-col justify-between gap-5 border-b border-[var(--border)] pb-6 md:flex-row md:items-end">

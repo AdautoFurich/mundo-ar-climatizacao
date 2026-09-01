@@ -1,12 +1,27 @@
 import { expect, test } from "@playwright/test";
 
-test("abre o dashboard da Mundo Ar", async ({ page }) => {
+test("protege o dashboard e apresenta o login", async ({ page }) => {
   await page.goto("/");
 
+  await expect(page).toHaveURL(/\/login\?next=%2F$/);
   await expect(
-    page.getByRole("heading", { name: "Ritmo da oficina, agora" }),
+    page.getByRole("heading", { name: "Entrar no sistema" }),
   ).toBeVisible();
+  await expect(page.getByLabel("E-mail")).toBeVisible();
+  await expect(page.getByLabel("Senha", { exact: true })).toBeVisible();
   await expect(
-    page.getByRole("button", { name: "Nova ordem de serviço" }),
+    page.getByRole("button", { name: "Entrar no sistema" }),
   ).toBeVisible();
+});
+
+test("valida os dados antes de tentar entrar", async ({ page }) => {
+  await page.goto("/login");
+  await page.waitForTimeout(2000);
+  await page.getByRole("button", { name: "Mostrar senha" }).click();
+  await expect(page.getByLabel("Senha", { exact: true })).toHaveAttribute("type", "text");
+  await page.getByLabel("E-mail").fill("email-invalido");
+  await page.getByRole("button", { name: "Entrar no sistema" }).click();
+
+  await expect(page.getByText("Informe um e-mail válido.")).toBeVisible();
+  await expect(page.getByText("Informe sua senha.")).toBeVisible();
 });

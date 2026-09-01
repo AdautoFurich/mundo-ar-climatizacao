@@ -1,22 +1,20 @@
 import { expect, test } from "@playwright/test";
 
-test("registra o dashboard para revisão visual em desktop e tela estreita", async ({
-  page,
-}) => {
+test("registra o acesso em desktop e tela estreita", async ({ page }) => {
   await page.setViewportSize({ width: 1366, height: 768 });
-  await page.goto("/");
+  await page.goto("/login");
   await expect(
-    page.getByRole("heading", { name: "Ritmo da oficina, agora" }),
+    page.getByRole("heading", { name: "Entrar no sistema" }),
   ).toBeVisible();
   await page.screenshot({
-    path: "test-results/dashboard-desktop.png",
+    path: "test-results/login-desktop.png",
     fullPage: true,
   });
 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.reload();
   await expect(
-    page.getByRole("heading", { name: "Ritmo da oficina, agora" }),
+    page.getByRole("heading", { name: "Entrar no sistema" }),
   ).toBeVisible();
   await expect
     .poll(() =>
@@ -26,7 +24,7 @@ test("registra o dashboard para revisão visual em desktop e tela estreita", asy
     )
     .toBe(true);
   await page.screenshot({
-    path: "test-results/dashboard-mobile.png",
+    path: "test-results/login-mobile.png",
     fullPage: true,
   });
 });
