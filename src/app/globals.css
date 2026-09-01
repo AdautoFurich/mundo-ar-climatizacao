@@ -1,0 +1,84 @@
+@import "tailwindcss";
+
+:root {
+  --brand: #102d3f;
+  --brand-strong: #0a2231;
+  --brand-soft: #dceaf0;
+  --brand-accent: #66d2c9;
+  --action: #0f766e;
+  --action-strong: #0a625c;
+  --warning: #b86612;
+  --warning-soft: #fff4df;
+  --danger: #b42318;
+  --success: #247a4d;
+  --canvas: #eef2f4;
+  --surface: #ffffff;
+  --surface-subtle: #f6f8f9;
+  --border: #d8e0e5;
+  --steel-strong: #aebbc4;
+  --ink: #172731;
+  --ink-muted: #5b6972;
+  --ink-faint: #77858e;
+  --focus: #087f8c;
+}
+
+* {
+  border-color: var(--border);
+}
+
+html {
+  background: var(--canvas);
+}
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--ink);
+  font-family: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a,
+summary {
+  -webkit-tap-highlight-color: transparent;
+}
+
+.font-display {
+  font-family: "Arial Narrow", "Roboto Condensed", "Source Sans 3", sans-serif;
+}
+
+.service-tag::before {
+  position: absolute;
+  inset-block: 0.55rem;
+  left: 0;
+  width: 0.2rem;
+  border-radius: 999px;
+  background: var(--brand-accent);
+  content: "";
+}
+
+.technical-grid {
+  background-image:
+    linear-gradient(rgba(16, 45, 63, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 45, 63, 0.035) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+::selection {
+  background: #a9e7e2;
+  color: var(--brand-strong);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}
