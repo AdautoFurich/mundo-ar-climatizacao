@@ -67,6 +67,182 @@ summary {
   background-size: 24px 24px;
 }
 
+/* Mantém a composição do acesso inteira em alturas comuns de notebook. */
+@media (min-width: 64rem) {
+  .auth-shell:has(.auth-login-form),
+  .auth-shell:has(.auth-login-form) .auth-showcase,
+  .auth-shell:has(.auth-login-form) .auth-stage {
+    height: 100dvh;
+    min-height: 0;
+  }
+
+  .auth-shell:has(.auth-login-form) {
+    overflow: hidden;
+  }
+}
+
+@media (min-width: 64rem) and (max-height: 53.125rem) {
+  .auth-showcase {
+    padding-block: 1.5rem;
+  }
+
+  .auth-logo {
+    width: 8.5rem;
+  }
+
+  .auth-showcase-content {
+    padding-block: 0.75rem;
+  }
+
+  .auth-showcase-title {
+    margin-top: 0.75rem;
+    font-size: clamp(2.15rem, 3.1vw, 3.25rem);
+    line-height: 1.02;
+  }
+
+  .auth-showcase-copy {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    line-height: 1.5;
+  }
+
+  .auth-highlights {
+    gap: 0.75rem;
+    margin-top: 1rem;
+  }
+
+  .auth-highlight-card {
+    min-height: 0;
+    padding: 0.875rem;
+  }
+
+  .auth-highlight-card > div {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .auth-highlight-card h2 {
+    margin-top: 0.625rem;
+  }
+
+  .auth-highlight-card p {
+    margin-top: 0.25rem;
+    font-size: 0.8rem;
+    line-height: 1.25rem;
+  }
+
+  .auth-showcase-footer {
+    padding-top: 0.75rem;
+  }
+
+  .auth-stage {
+    padding: 1rem 2rem;
+  }
+
+  .auth-card {
+    max-width: 35rem;
+    padding: 1.5rem 2.25rem;
+  }
+
+  .auth-login-lock {
+    width: 3.5rem;
+    height: 3.5rem;
+  }
+
+  .auth-login-eyebrow {
+    margin-top: 0.75rem;
+  }
+
+  .auth-login-title {
+    margin-top: 0.25rem;
+    font-size: 2rem;
+  }
+
+  .auth-login-form {
+    margin-top: 1.25rem;
+  }
+
+  .auth-login-form form {
+    gap: 0.75rem;
+  }
+
+  .auth-login-form input,
+  .auth-login-form button[type="submit"] {
+    min-height: 3rem;
+  }
+
+  .auth-card-footer {
+    margin-top: 1.25rem;
+    padding-top: 0.75rem;
+  }
+}
+
+@media (min-width: 64rem) and (max-height: 45rem) {
+  .auth-showcase {
+    padding-block: 1rem;
+  }
+
+  .auth-logo {
+    width: 7rem;
+  }
+
+  .auth-showcase-content {
+    padding-block: 0.25rem;
+  }
+
+  .auth-showcase-title {
+    font-size: clamp(1.9rem, 2.8vw, 2.65rem);
+  }
+
+  .auth-showcase-copy {
+    font-size: 0.875rem;
+  }
+
+  .auth-highlight-card {
+    padding: 0.625rem;
+  }
+
+  .auth-highlight-card p {
+    font-size: 0.75rem;
+    line-height: 1.1rem;
+  }
+
+  .auth-card {
+    padding-block: 1rem;
+  }
+
+  .auth-login-lock {
+    width: 3rem;
+    height: 3rem;
+  }
+
+  .auth-login-lock svg {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .auth-login-title {
+    font-size: 1.75rem;
+  }
+
+  .auth-login-form {
+    margin-top: 1rem;
+  }
+
+  .auth-login-form form {
+    gap: 0.55rem;
+  }
+
+  .auth-login-form input,
+  .auth-login-form button[type="submit"] {
+    min-height: 2.75rem;
+  }
+
+  .auth-card-footer {
+    margin-top: 1rem;
+    padding-top: 0.625rem;
+  }
+}
 ::selection {
   background: #a9e7e2;
   color: var(--brand-strong);

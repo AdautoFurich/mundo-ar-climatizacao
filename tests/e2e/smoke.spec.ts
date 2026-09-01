@@ -5,7 +5,7 @@ test("protege o dashboard e apresenta o login", async ({ page }) => {
 
   await expect(page).toHaveURL(/\/login\?next=%2F$/);
   await expect(
-    page.getByRole("heading", { name: "Entrar no sistema" }),
+    page.getByRole("heading", { name: "Acessar Sistema" }),
   ).toBeVisible();
   const logo = page.locator('img[alt="Mundo Ar Climatização"]:visible');
   await expect(logo).toBeVisible();
