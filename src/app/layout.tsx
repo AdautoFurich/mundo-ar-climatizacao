@@ -1,6 +1,19 @@
 import type { Metadata } from "next";
+import { Archivo_Narrow, Source_Sans_3 } from "next/font/google";
 
 import "./globals.css";
+
+const bodyFont = Source_Sans_3({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-body",
+});
+
+const displayFont = Archivo_Narrow({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-display",
+});
 
 export const metadata: Metadata = {
   title: "Mundo Ar | Gestão da oficina",
@@ -14,7 +27,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR">
+    <html
+      className={`${bodyFont.variable} ${displayFont.variable}`}
+      lang="pt-BR"
+    >
       <body>{children}</body>
     </html>
   );

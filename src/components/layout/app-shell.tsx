@@ -69,7 +69,7 @@ function NavigationGroup({
 }) {
   return (
     <div>
-      <p className="mb-2 px-3 text-[0.625rem] font-bold uppercase tracking-[0.18em] text-teal-300">
+      <p className="mb-2 px-3 text-2xs font-bold uppercase tracking-[0.18em] text-teal-300">
         {label}
       </p>
       <nav aria-label={label}>
@@ -169,7 +169,7 @@ function SidebarContent({
             </div>
             <div>
               <p className="text-xs font-semibold text-white">Ambiente interno</p>
-              <p className="mt-0.5 text-[0.65rem] leading-4 text-slate-300">
+              <p className="mt-0.5 text-xs leading-4 text-slate-300">
                 Acesso restrito e monitorado
               </p>
             </div>
@@ -199,12 +199,12 @@ function DashboardTools({ user }: { user: CurrentUser }) {
           className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[var(--ink-faint)]"
         />
         <input
-          className="h-10 w-full rounded-lg border bg-white pl-10 pr-14 text-sm outline-none placeholder:text-slate-400 focus:border-[var(--focus)] focus:ring-2 focus:ring-[var(--focus)]/20"
+          className="h-10 w-full rounded-lg border bg-white pl-10 pr-14 text-sm outline-none placeholder:text-slate-500 focus:border-[var(--focus)] focus:ring-2 focus:ring-[var(--focus)]/20"
           placeholder="Buscar por ordem, cliente, veículo..."
           readOnly
           type="search"
         />
-        <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border bg-[var(--surface-subtle)] px-1.5 py-0.5 text-[0.625rem] text-[var(--ink-faint)]">
+        <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border bg-[var(--surface-subtle)] px-1.5 py-0.5 text-2xs text-[var(--ink-faint)]">
           Ctrl + K
         </kbd>
       </label>
@@ -236,7 +236,7 @@ function DashboardTools({ user }: { user: CurrentUser }) {
         type="button"
       >
         <Bell aria-hidden="true" className="size-[1.15rem]" />
-        <span className="absolute right-0.5 top-0.5 grid size-4 place-items-center rounded-full bg-[var(--action)] text-[0.6rem] font-bold text-white">
+        <span className="absolute right-0.5 top-0.5 grid size-4 place-items-center rounded-full bg-[var(--action)] text-2xs font-bold text-white">
           3
         </span>
       </button>
@@ -252,7 +252,7 @@ function DashboardTools({ user }: { user: CurrentUser }) {
           <p className="truncate text-sm font-semibold leading-4 text-[var(--brand)]">
             {user.name}
           </p>
-          <p className="mt-0.5 text-[0.68rem] text-[var(--ink-muted)]">
+          <p className="mt-0.5 text-xs text-[var(--ink-muted)]">
             {roleLabel[user.role]}
           </p>
         </div>
@@ -265,20 +265,20 @@ function DashboardTools({ user }: { user: CurrentUser }) {
 export function AppShell({
   children,
   currentPath,
+  description,
+  title,
   user,
 }: {
   children: ReactNode;
   currentPath: string;
+  /** Subtítulo da rota, exibido sob o h1 na barra superior. */
+  description: string;
+  /** Único h1 da página. Cada rota informa o seu. */
+  title: string;
   user: CurrentUser;
 }) {
-  const pageTitle = currentPath === "/usuarios" ? "Usuários" : "Visão geral";
-  const pageDescription =
-    currentPath === "/usuarios"
-      ? "Gerencie o acesso da equipe"
-      : "Acompanhe o desempenho da oficina em tempo real";
-
   return (
-    <div className="min-h-dvh bg-[#f6f8fa] text-[var(--ink)]">
+    <div className="min-h-dvh bg-[var(--canvas)] text-[var(--ink)]">
       <a
         className="fixed left-4 top-4 z-[60] -translate-y-24 rounded-lg bg-white px-4 py-3 font-semibold text-[var(--ink)] shadow-lg focus:translate-y-0"
         href="#conteudo-principal"
@@ -304,11 +304,11 @@ export function AppShell({
             </details>
 
             <div className="min-w-0 shrink-0">
-              <h1 className="truncate text-lg font-bold tracking-tight text-[var(--brand)]">
-                {pageTitle}
+              <h1 className="font-display truncate text-xl font-bold tracking-tight text-[var(--brand)]">
+                {title}
               </h1>
               <p className="hidden text-xs text-[var(--ink-muted)] md:block">
-                {pageDescription}
+                {description}
               </p>
             </div>
 

@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Escala tipografica: 6 degraus. Nada abaixo de 11px. */
+@theme {
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+}
+
 :root {
   --brand: #102d3f;
   --brand-strong: #0a2231;
@@ -7,7 +13,7 @@
   --brand-accent: #66d2c9;
   --action: #0f766e;
   --action-strong: #0a625c;
-  --warning: #b86612;
+  --warning: #a85c0e;
   --warning-soft: #fff4df;
   --danger: #b42318;
   --success: #247a4d;
@@ -18,8 +24,10 @@
   --steel-strong: #aebbc4;
   --ink: #172731;
   --ink-muted: #5b6972;
-  --ink-faint: #77858e;
+  --ink-faint: #66747e;
   --focus: #087f8c;
+
+  color-scheme: light;
 }
 
 * {
@@ -34,7 +42,7 @@ body {
   margin: 0;
   background: var(--canvas);
   color: var(--ink);
-  font-family: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-body), "Segoe UI", system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
@@ -47,7 +55,7 @@ summary {
 }
 
 .font-display {
-  font-family: "Arial Narrow", "Roboto Condensed", "Source Sans 3", sans-serif;
+  font-family: var(--font-display), "Arial Narrow", "Segoe UI", sans-serif;
 }
 
 .service-tag::before {
