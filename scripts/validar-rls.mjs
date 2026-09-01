@@ -70,7 +70,14 @@ try {
   const { data: administratorView, error: administratorViewError } =
     await administratorClient.from("perfis_usuarios").select("id");
   assert.ifError(administratorViewError);
-  assert.equal(administratorView?.length, 3);
+  const visibleUserIds = new Set(
+    administratorView?.map(({ id }) => id) ?? [],
+  );
+  assert.equal(
+    createdUserIds.every((id) => visibleUserIds.has(id)),
+    true,
+    "O administrador deve visualizar todos os usuários temporários.",
+  );
 
   const { data: allowedUpdate, error: allowedUpdateError } =
     await administratorClient
