@@ -1,30 +1,40 @@
 import {
   BarChart3,
+  Bell,
+  CalendarDays,
   CarFront,
+  ChevronDown,
   ClipboardList,
   Gauge,
   LogOut,
   Menu,
+  Search,
   Settings,
+  SlidersHorizontal,
+  Stethoscope,
   Users,
   Wrench,
 } from "lucide-react";
 import type { ReactNode } from "react";
 
 import { BrandLogo } from "@/components/brand/brand-logo";
-
 import { logoutAction } from "@/features/auth/actions";
 import { can } from "@/features/auth/permissions";
 import type { CurrentUser } from "@/features/auth/types";
 import { cn } from "@/lib/utils";
 
-const navigation = [
+const operationNavigation = [
   { label: "Visão geral", icon: Gauge, href: "/" },
   { label: "Ordens de serviço", icon: ClipboardList },
+  { label: "Diagnósticos", icon: Stethoscope },
   { label: "Clientes", icon: Users },
   { label: "Veículos", icon: CarFront },
   { label: "Serviços", icon: Wrench },
+] as const;
+
+const managementNavigation = [
   { label: "Relatórios", icon: BarChart3 },
+  { label: "Agenda", icon: CalendarDays },
 ] as const;
 
 const roleLabel = {
@@ -34,70 +44,221 @@ const roleLabel = {
 } as const;
 
 function initials(name: string) {
-  return name
-    .trim()
-    .split(/\s+/)
-    .slice(0, 2)
-    .map((part) => part[0]?.toUpperCase())
-    .join("") || "MA";
+  return (
+    name
+      .trim()
+      .split(/\s+/)
+      .slice(0, 2)
+      .map((part) => part[0]?.toUpperCase())
+      .join("") || "MA"
+  );
 }
 
-function Brand() {
+function NavigationGroup({
+  currentPath,
+  items,
+  label,
+}: {
+  currentPath: string;
+  items: ReadonlyArray<{
+    label: string;
+    icon: typeof Gauge;
+    href?: string;
+  }>;
+  label: string;
+}) {
   return (
-    <div className="flex justify-center">
-      <BrandLogo className="w-28 lg:w-32" />
+    <div>
+      <p className="mb-2 px-3 text-[0.625rem] font-bold uppercase tracking-[0.18em] text-teal-300">
+        {label}
+      </p>
+      <nav aria-label={label}>
+        <ul className="grid gap-1">
+          {items.map((item) => {
+            const Icon = item.icon;
+            const active = item.href === currentPath;
+            const classes = cn(
+              "relative flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300",
+              active
+                ? "border-l-2 border-teal-300 bg-teal-500/25 text-white"
+                : item.href
+                  ? "text-slate-200 hover:bg-white/8 hover:text-white"
+                  : "cursor-not-allowed text-slate-300/75",
+            );
+
+            return (
+              <li key={item.label}>
+                {item.href ? (
+                  <a
+                    aria-current={active ? "page" : undefined}
+                    className={classes}
+                    href={item.href}
+                  >
+                    <Icon aria-hidden="true" className="size-[1.1rem] shrink-0" />
+                    {item.label}
+                  </a>
+                ) : (
+                  <span
+                    aria-disabled="true"
+                    className={classes}
+                    title="Módulo planejado para uma próxima etapa"
+                  >
+                    <Icon aria-hidden="true" className="size-[1.1rem] shrink-0" />
+                    {item.label}
+                  </span>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
     </div>
   );
 }
 
-function Navigation({
-  compact = false,
+function SidebarContent({
   currentPath,
   user,
 }: {
-  compact?: boolean;
   currentPath: string;
   user: CurrentUser;
 }) {
-  const items = can(user.role, "usuarios:gerenciar")
-    ? [...navigation, { label: "Usuários", icon: Users, href: "/usuarios" } as const]
-    : navigation;
+  const configurationItems = can(user.role, "usuarios:gerenciar")
+    ? [
+        { label: "Usuários", icon: Users, href: "/usuarios" },
+        { label: "Configurações", icon: Settings },
+      ]
+    : [{ label: "Configurações", icon: Settings }];
 
   return (
-    <nav aria-label="Navegação principal">
-      <ul className={cn("grid gap-1.5", compact && "grid-cols-2 py-3")}>
-        {items.map((item) => {
-          const Icon = item.icon;
-          const href = "href" in item ? item.href : undefined;
-          const active = href === currentPath;
-          const classes = cn(
-            "group relative flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-accent)]",
-            active
-              ? "service-tag bg-white/11 text-white"
-              : href
-                ? "text-slate-300 hover:bg-white/7 hover:text-white"
-                : "cursor-not-allowed text-slate-500",
-            compact && "text-xs",
-          );
+    <>
+      <div className="flex h-[8.5rem] shrink-0 items-center justify-center border-b border-white/10">
+        <BrandLogo className="w-32" />
+      </div>
 
-          return (
-            <li key={item.label}>
-              {href ? (
-                <a aria-current={active ? "page" : undefined} className={classes} href={href}>
-                  <Icon aria-hidden="true" className="size-[1.1rem] shrink-0" />
-                  <span>{item.label}</span>
-                </a>
-              ) : (
-                <span aria-disabled="true" className={classes} title="Módulo planejado para a próxima etapa">
-                  <Icon aria-hidden="true" className="size-[1.1rem] shrink-0" />
-                  <span>{item.label}</span>
-                </span>
-              )}
-            </li>
-          );
-        })}
-      </ul>
-    </nav>
+      <div className="flex-1 space-y-5 overflow-y-auto px-3 py-5">
+        <NavigationGroup
+          currentPath={currentPath}
+          items={operationNavigation}
+          label="Operação da oficina"
+        />
+        <div className="border-t border-white/8 pt-5">
+          <NavigationGroup
+            currentPath={currentPath}
+            items={managementNavigation}
+            label="Gestão"
+          />
+        </div>
+        <div className="border-t border-white/8 pt-5">
+          <NavigationGroup
+            currentPath={currentPath}
+            items={configurationItems}
+            label="Configurações"
+          />
+        </div>
+      </div>
+
+      <div className="shrink-0 space-y-2 px-3 pb-5">
+        <div className="rounded-lg border border-white/20 bg-white/[0.035] p-3">
+          <div className="flex items-start gap-2.5">
+            <div
+              aria-hidden="true"
+              className="mt-0.5 grid size-8 shrink-0 place-items-center rounded-full bg-teal-400/10 text-teal-300"
+            >
+              <Gauge className="size-4" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold text-white">Ambiente interno</p>
+              <p className="mt-0.5 text-[0.65rem] leading-4 text-slate-300">
+                Acesso restrito e monitorado
+              </p>
+            </div>
+          </div>
+        </div>
+        <form action={logoutAction}>
+          <button
+            className="flex min-h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium text-slate-200 transition-colors hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
+            type="submit"
+          >
+            <LogOut aria-hidden="true" className="size-[1.1rem]" />
+            Sair
+          </button>
+        </form>
+      </div>
+    </>
+  );
+}
+
+function DashboardTools({ user }: { user: CurrentUser }) {
+  return (
+    <div className="flex min-w-0 flex-1 items-center justify-end gap-2.5">
+      <label className="relative hidden min-w-0 max-w-[21rem] flex-1 xl:block">
+        <span className="sr-only">Buscar no sistema</span>
+        <Search
+          aria-hidden="true"
+          className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[var(--ink-faint)]"
+        />
+        <input
+          className="h-10 w-full rounded-lg border bg-white pl-10 pr-14 text-sm outline-none placeholder:text-slate-400 focus:border-[var(--focus)] focus:ring-2 focus:ring-[var(--focus)]/20"
+          placeholder="Buscar por ordem, cliente, veículo..."
+          readOnly
+          type="search"
+        />
+        <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border bg-[var(--surface-subtle)] px-1.5 py-0.5 text-[0.625rem] text-[var(--ink-faint)]">
+          Ctrl + K
+        </kbd>
+      </label>
+
+      <button
+        aria-disabled="true"
+        className="hidden h-10 items-center gap-2 rounded-lg border bg-white px-3 text-sm font-semibold text-[var(--brand)] lg:flex"
+        title="Filtro demonstrativo"
+        type="button"
+      >
+        <CalendarDays aria-hidden="true" className="size-4" />
+        Hoje
+        <ChevronDown aria-hidden="true" className="size-3.5" />
+      </button>
+      <button
+        aria-disabled="true"
+        className="hidden h-10 items-center gap-2 rounded-lg border bg-white px-3 text-sm font-semibold text-[var(--brand)] 2xl:flex"
+        title="Filtro demonstrativo"
+        type="button"
+      >
+        <SlidersHorizontal aria-hidden="true" className="size-4" />
+        Todos os status
+        <ChevronDown aria-hidden="true" className="size-3.5" />
+      </button>
+
+      <button
+        aria-label="Notificações: 3 não lidas"
+        className="relative grid size-10 shrink-0 place-items-center rounded-lg text-[var(--brand)] hover:bg-[var(--surface-subtle)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+        type="button"
+      >
+        <Bell aria-hidden="true" className="size-[1.15rem]" />
+        <span className="absolute right-0.5 top-0.5 grid size-4 place-items-center rounded-full bg-[var(--action)] text-[0.6rem] font-bold text-white">
+          3
+        </span>
+      </button>
+
+      <div className="hidden h-10 items-center gap-2.5 border-l pl-3 sm:flex">
+        <div
+          aria-hidden="true"
+          className="grid size-9 shrink-0 place-items-center rounded-full bg-teal-50 text-xs font-bold text-[var(--action)]"
+        >
+          {initials(user.name)}
+        </div>
+        <div className="hidden min-w-0 max-w-32 xl:block">
+          <p className="truncate text-sm font-semibold leading-4 text-[var(--brand)]">
+            {user.name}
+          </p>
+          <p className="mt-0.5 text-[0.68rem] text-[var(--ink-muted)]">
+            {roleLabel[user.role]}
+          </p>
+        </div>
+        <ChevronDown aria-hidden="true" className="hidden size-3.5 text-[var(--ink-faint)] xl:block" />
+      </div>
+    </div>
   );
 }
 
@@ -110,74 +271,63 @@ export function AppShell({
   currentPath: string;
   user: CurrentUser;
 }) {
+  const pageTitle = currentPath === "/usuarios" ? "Usuários" : "Visão geral";
+  const pageDescription =
+    currentPath === "/usuarios"
+      ? "Gerencie o acesso da equipe"
+      : "Acompanhe o desempenho da oficina em tempo real";
+
   return (
-    <div className="min-h-screen bg-[var(--canvas)] text-[var(--ink)]">
+    <div className="min-h-dvh bg-[#f6f8fa] text-[var(--ink)]">
       <a
-        className="fixed left-4 top-4 z-50 -translate-y-24 rounded-lg bg-white px-4 py-3 font-semibold text-[var(--ink)] shadow-lg focus:translate-y-0"
+        className="fixed left-4 top-4 z-[60] -translate-y-24 rounded-lg bg-white px-4 py-3 font-semibold text-[var(--ink)] shadow-lg focus:translate-y-0"
         href="#conteudo-principal"
       >
         Ir para o conteúdo
       </a>
 
-      <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col bg-[var(--brand)] px-4 py-5 lg:flex">
-        <div className="border-b border-white/12 px-2 pb-4"><Brand /></div>
-        <div className="mt-5 flex-1">
-          <p className="mb-2 px-3 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-slate-400">
-            Operação da oficina
-          </p>
-          <Navigation currentPath={currentPath} user={user} />
-        </div>
-        <div className="border-t border-white/12 pt-3">
-          <span aria-disabled="true" className="flex min-h-11 cursor-not-allowed items-center gap-3 rounded-lg px-3 text-sm font-semibold text-slate-500">
-            <Settings aria-hidden="true" className="size-[1.1rem]" />
-            Configurações
-          </span>
-          <form action={logoutAction}>
-            <button className="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm font-semibold text-slate-300 transition-colors hover:bg-white/7 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--brand-accent)]" type="submit">
-              <LogOut aria-hidden="true" className="size-[1.1rem]" />
-              Sair
-            </button>
-          </form>
-        </div>
+      <aside className="fixed inset-y-0 left-0 z-40 hidden w-56 flex-col overflow-hidden bg-[var(--brand-strong)] lg:flex">
+        <SidebarContent currentPath={currentPath} user={user} />
       </aside>
 
-      <div className="lg:pl-64">
-        <header className="sticky top-0 z-30 border-b border-[var(--border)] bg-white/94 backdrop-blur">
-          <div className="flex min-h-16 items-center justify-between gap-4 px-4 sm:px-6 lg:px-8">
-            <div className="lg:hidden">
-              <details className="relative">
-                <summary className="flex size-11 cursor-pointer list-none items-center justify-center rounded-lg border border-[var(--border)] text-[var(--ink)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]">
-                  <Menu aria-hidden="true" className="size-5" />
-                  <span className="sr-only">Abrir menu principal</span>
-                </summary>
-                <div className="absolute left-0 top-13 w-[min(22rem,calc(100vw-2rem))] rounded-xl border border-[var(--border)] bg-[var(--brand)] p-4 shadow-xl">
-                  <Brand />
-                  <div className="mt-4 border-t border-white/12 pt-2">
-                    <Navigation compact currentPath={currentPath} user={user} />
-                  </div>
-                  <form action={logoutAction} className="border-t border-white/12 pt-2">
-                    <button className="flex min-h-11 w-full items-center gap-3 rounded-lg px-3 text-sm font-semibold text-slate-300 hover:bg-white/7 hover:text-white" type="submit">
-                      <LogOut aria-hidden="true" className="size-[1.1rem]" /> Sair
-                    </button>
-                  </form>
+      <div className="lg:pl-56">
+        <header className="sticky top-0 z-30 border-b bg-white/95 backdrop-blur">
+          <div className="flex min-h-[5.35rem] items-center gap-4 px-4 sm:px-6 lg:px-7">
+            <details className="relative lg:hidden">
+              <summary className="flex size-10 cursor-pointer list-none items-center justify-center rounded-lg border text-[var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]">
+                <Menu aria-hidden="true" className="size-5" />
+                <span className="sr-only">Abrir menu principal</span>
+              </summary>
+              <div className="absolute -left-4 top-12 flex max-h-[calc(100dvh-6rem)] w-[min(22rem,calc(100vw-1rem))] flex-col overflow-y-auto rounded-r-xl bg-[var(--brand-strong)] shadow-2xl">
+                <SidebarContent currentPath={currentPath} user={user} />
+              </div>
+            </details>
+
+            <div className="min-w-0 shrink-0">
+              <h1 className="truncate text-lg font-bold tracking-tight text-[var(--brand)]">
+                {pageTitle}
+              </h1>
+              <p className="hidden text-xs text-[var(--ink-muted)] md:block">
+                {pageDescription}
+              </p>
+            </div>
+
+            {currentPath === "/" ? (
+              <DashboardTools user={user} />
+            ) : (
+              <div className="ml-auto flex items-center gap-3">
+                <div className="hidden text-right sm:block">
+                  <p className="text-sm font-semibold text-[var(--ink)]">{user.name}</p>
+                  <p className="text-xs text-[var(--ink-muted)]">{roleLabel[user.role]}</p>
                 </div>
-              </details>
-            </div>
-
-            <div className="hidden lg:block">
-              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[var(--ink-faint)]">Ambiente de desenvolvimento</p>
-              <p className="mt-0.5 text-sm font-semibold text-[var(--ink)]">Operação em andamento</p>
-            </div>
-
-            <div className="flex items-center gap-3">
-              <div className="hidden max-w-56 text-right sm:block">
-                <p className="truncate text-sm font-semibold text-[var(--ink)]">{user.name}</p>
-                <p className="text-xs text-[var(--ink-muted)]">{roleLabel[user.role]}</p>
+                <div
+                  aria-hidden="true"
+                  className="grid size-10 place-items-center rounded-full bg-teal-50 text-sm font-bold text-[var(--action)]"
+                >
+                  {initials(user.name)}
+                </div>
               </div>
-              <div aria-hidden="true" className="grid size-10 place-items-center rounded-full bg-[var(--brand-soft)] text-sm font-bold text-[var(--brand)]">
-                {initials(user.name)}
-              </div>
-            </div>
+            )}
           </div>
         </header>
 

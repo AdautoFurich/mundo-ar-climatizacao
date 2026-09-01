@@ -22,7 +22,7 @@ describe("Dashboard inicial", () => {
     render(await Home());
 
     expect(
-      screen.getByRole("heading", { name: "Ritmo da oficina, agora" }),
+      screen.getByRole("heading", { name: "Visão geral" }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: "Nova ordem de serviço" }),
@@ -30,7 +30,10 @@ describe("Dashboard inicial", () => {
     expect(
       screen.getByRole("button", { name: "Novo cliente" }),
     ).toBeInTheDocument();
-    expect(screen.getByText("Aguardando aprovação")).toBeInTheDocument();
+    expect(screen.getAllByText("Aguardando aprovação")).toHaveLength(2);
+    expect(screen.getByRole("heading", { name: "Ordens recentes" })).toBeInTheDocument();
+    expect(screen.getByText("Próximas ações")).toBeInTheDocument();
+    expect(screen.getByText("Ticket médio")).toBeInTheDocument();
     expect(screen.getByText("Adauto Furich")).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "Sair" })).toHaveLength(2);
   });

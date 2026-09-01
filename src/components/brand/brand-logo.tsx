@@ -10,18 +10,14 @@ export function BrandLogo({
   imageClassName?: string;
 }) {
   return (
-    <div
-      className={cn(
-        "overflow-hidden rounded-2xl border border-white/30 bg-white p-2 shadow-[0_12px_30px_rgba(4,24,38,0.18)]",
-        className,
-      )}
-    >
+    <div className={cn("relative", className)}>
       <Image
         alt="Mundo Ar Climatização"
         className={cn("h-auto w-full object-contain", imageClassName)}
         height={1254}
-        sizes="(min-width: 1024px) 144px, 88px"
-        src="/brand/mundo-ar-logo.png"
+        loading="eager"
+        sizes="(min-width: 1024px) 136px, 104px"
+        src="/brand/mundo-ar-logo-white.png"
         width={1254}
       />
     </div>
