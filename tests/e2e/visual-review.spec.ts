@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 
 test("registra o acesso em desktop e tela estreita", async ({ page }) => {
-  await page.setViewportSize({ width: 1366, height: 768 });
+  await page.setViewportSize({ width: 1672, height: 941 });
   await page.goto("/login");
   await expect(
     page.getByRole("heading", { name: "Entrar no sistema" }),

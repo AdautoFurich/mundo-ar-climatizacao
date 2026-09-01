@@ -1,7 +1,16 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Eye, EyeOff, LoaderCircle, LogIn, Send, ShieldCheck } from "lucide-react";
+import {
+  Eye,
+  EyeOff,
+  LoaderCircle,
+  LockKeyhole,
+  LogIn,
+  Mail,
+  Send,
+  ShieldCheck,
+} from "lucide-react";
 import Link from "next/link";
 import { startTransition, useActionState, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -22,7 +31,7 @@ import {
 import { INITIAL_ACTION_STATE } from "@/features/auth/types";
 
 const fieldClassName =
-  "min-h-11 w-full rounded-lg border border-[var(--border)] bg-white px-3.5 text-base text-[var(--ink)] shadow-[0_1px_1px_rgba(15,35,47,0.03)] outline-none transition placeholder:text-slate-400 focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--focus)]/25";
+  "min-h-14 w-full rounded-lg border border-[var(--border)] bg-white px-3.5 text-base text-[var(--ink)] shadow-[0_1px_1px_rgba(15,35,47,0.03)] outline-none transition placeholder:text-slate-400 focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--focus)]/25";
 
 function FieldError({ id, messages }: { id: string; messages?: string[] }) {
   if (!messages?.length) return null;
@@ -53,12 +62,16 @@ function PasswordField({
         {label}
       </label>
       <div className="relative mt-1.5">
+        <LockKeyhole
+          aria-hidden="true"
+          className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[var(--ink-faint)]"
+        />
         <input
           {...registration}
           aria-describedby={error?.length ? errorId : undefined}
           aria-invalid={Boolean(error?.length)}
           autoComplete={id === "password" ? "current-password" : "new-password"}
-          className={`${fieldClassName} pr-12`}
+          className={`${fieldClassName} pl-12 pr-12`}
           id={id}
           type={visible ? "text" : "password"}
         />
@@ -110,17 +123,23 @@ export function LoginForm({ next = "/" }: { next?: string }) {
         <label className="text-sm font-semibold text-[var(--ink)]" htmlFor="email">
           E-mail
         </label>
-        <input
-          {...form.register("email")}
-          aria-describedby="email-error"
-          aria-invalid={Boolean(form.formState.errors.email || state.fieldErrors?.email)}
-          autoComplete="email"
-          className={`${fieldClassName} mt-1.5`}
-          id="email"
-          inputMode="email"
-          placeholder="nome@empresa.com.br"
-          type="email"
-        />
+        <div className="relative mt-1.5">
+          <Mail
+            aria-hidden="true"
+            className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[var(--ink-faint)]"
+          />
+          <input
+            {...form.register("email")}
+            aria-describedby="email-error"
+            aria-invalid={Boolean(form.formState.errors.email || state.fieldErrors?.email)}
+            autoComplete="email"
+            className={`${fieldClassName} pl-12`}
+            id="email"
+            inputMode="email"
+            placeholder="nome@empresa.com.br"
+            type="email"
+          />
+        </div>
         <FieldError
           id="email-error"
           messages={
@@ -148,7 +167,7 @@ export function LoginForm({ next = "/" }: { next?: string }) {
           Esqueci minha senha
         </Link>
       </div>
-      <Button className="w-full" disabled={pending} type="submit">
+      <Button className="min-h-14 w-full shadow-[0_12px_24px_rgba(15,118,110,0.2)]" disabled={pending} type="submit">
         {pending ? (
           <LoaderCircle aria-hidden="true" className="size-4 animate-spin" />
         ) : (
@@ -186,16 +205,23 @@ export function RecoveryForm() {
         <label className="text-sm font-semibold text-[var(--ink)]" htmlFor="email">
           E-mail da conta
         </label>
-        <input
-          {...form.register("email")}
-          aria-describedby="email-error"
-          aria-invalid={Boolean(form.formState.errors.email)}
-          autoComplete="email"
-          className={`${fieldClassName} mt-1.5`}
-          id="email"
-          inputMode="email"
-          type="email"
-        />
+        <div className="relative mt-1.5">
+          <Mail
+            aria-hidden="true"
+            className="pointer-events-none absolute left-4 top-1/2 size-5 -translate-y-1/2 text-[var(--ink-faint)]"
+          />
+          <input
+            {...form.register("email")}
+            aria-describedby="email-error"
+            aria-invalid={Boolean(form.formState.errors.email || state.fieldErrors?.email)}
+            autoComplete="email"
+            className={`${fieldClassName} pl-12`}
+            id="email"
+            inputMode="email"
+            placeholder="nome@empresa.com.br"
+            type="email"
+          />
+        </div>
         <FieldError
           id="email-error"
           messages={
@@ -205,7 +231,7 @@ export function RecoveryForm() {
           }
         />
       </div>
-      <Button className="w-full" disabled={pending} type="submit">
+      <Button className="min-h-14 w-full shadow-[0_12px_24px_rgba(15,118,110,0.2)]" disabled={pending} type="submit">
         {pending ? (
           <LoaderCircle aria-hidden="true" className="size-4 animate-spin" />
         ) : (
