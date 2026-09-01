@@ -11,6 +11,8 @@ import {
 } from "lucide-react";
 import type { ReactNode } from "react";
 
+import { BrandLogo } from "@/components/brand/brand-logo";
+
 import { logoutAction } from "@/features/auth/actions";
 import { can } from "@/features/auth/permissions";
 import type { CurrentUser } from "@/features/auth/types";
@@ -42,21 +44,8 @@ function initials(name: string) {
 
 function Brand() {
   return (
-    <div className="flex items-center gap-3">
-      <div
-        aria-hidden="true"
-        className="grid size-11 place-items-center rounded-xl border border-white/15 bg-white/8 text-[var(--brand-accent)]"
-      >
-        <Wrench className="size-5" strokeWidth={2.2} />
-      </div>
-      <div>
-        <p className="font-display text-xl font-bold uppercase leading-none tracking-[0.02em] text-white">
-          Mundo Ar
-        </p>
-        <p className="mt-1 text-[0.64rem] font-semibold uppercase tracking-[0.18em] text-[var(--brand-accent)]">
-          Climatização automotiva
-        </p>
-      </div>
+    <div className="flex justify-center">
+      <BrandLogo className="w-28 lg:w-32" />
     </div>
   );
 }
@@ -131,8 +120,8 @@ export function AppShell({
       </a>
 
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col bg-[var(--brand)] px-4 py-5 lg:flex">
-        <div className="border-b border-white/12 px-2 pb-5"><Brand /></div>
-        <div className="mt-6 flex-1">
+        <div className="border-b border-white/12 px-2 pb-4"><Brand /></div>
+        <div className="mt-5 flex-1">
           <p className="mb-2 px-3 text-[0.65rem] font-bold uppercase tracking-[0.16em] text-slate-400">
             Operação da oficina
           </p>

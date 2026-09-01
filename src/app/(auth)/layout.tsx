@@ -1,5 +1,7 @@
-import { Gauge, ShieldCheck, Wrench } from "lucide-react";
+import { Gauge, ShieldCheck } from "lucide-react";
 import type { ReactNode } from "react";
+
+import { BrandLogo } from "@/components/brand/brand-logo";
 
 export default function AuthLayout({ children }: { children: ReactNode }) {
   return (
@@ -12,18 +14,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
           <div className="absolute bottom-28 right-20 size-40 rounded-full border border-[var(--brand-accent)]/25" />
         </div>
 
-        <div className="relative flex items-center gap-3">
-          <div className="grid size-12 place-items-center rounded-xl border border-white/15 bg-white/8 text-[var(--brand-accent)]">
-            <Wrench aria-hidden="true" className="size-5" />
-          </div>
-          <div>
-            <p className="font-display text-2xl font-bold uppercase leading-none tracking-[0.02em]">
-              Mundo Ar
-            </p>
-            <p className="mt-1 text-[0.67rem] font-semibold uppercase tracking-[0.19em] text-[var(--brand-accent)]">
-              Climatização automotiva
-            </p>
-          </div>
+        <div className="relative">
+          <BrandLogo className="w-36 rounded-3xl p-3" />
         </div>
 
         <div className="relative max-w-xl pb-8">
@@ -63,14 +55,8 @@ export default function AuthLayout({ children }: { children: ReactNode }) {
 
       <section className="flex min-h-screen items-center justify-center px-5 py-10 sm:px-8 lg:px-12">
         <div className="w-full max-w-md">
-          <div className="mb-10 flex items-center gap-3 lg:hidden">
-            <div className="grid size-11 place-items-center rounded-xl bg-[var(--brand)] text-[var(--brand-accent)]">
-              <Wrench aria-hidden="true" className="size-5" />
-            </div>
-            <div>
-              <p className="font-display text-xl font-bold uppercase leading-none text-[var(--brand)]">Mundo Ar</p>
-              <p className="mt-1 text-[0.62rem] font-bold uppercase tracking-[0.16em] text-[var(--action)]">Climatização automotiva</p>
-            </div>
+          <div className="mb-8 lg:hidden">
+            <BrandLogo className="w-20 rounded-xl p-1.5 shadow-[0_8px_22px_rgba(16,45,63,0.14)]" />
           </div>
           {children}
         </div>

@@ -7,6 +7,9 @@ test("protege o dashboard e apresenta o login", async ({ page }) => {
   await expect(
     page.getByRole("heading", { name: "Entrar no sistema" }),
   ).toBeVisible();
+  const logo = page.locator('img[alt="Mundo Ar Climatização"]:visible');
+  await expect(logo).toBeVisible();
+  await expect.poll(() => logo.evaluate((image) => image.complete && image.naturalWidth > 0)).toBe(true);
   await expect(page.getByLabel("E-mail")).toBeVisible();
   await expect(page.getByLabel("Senha", { exact: true })).toBeVisible();
   await expect(
