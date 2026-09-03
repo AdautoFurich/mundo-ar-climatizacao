@@ -8,7 +8,7 @@ Sistema web de apoio à operação da oficina Mundo Ar Climatização, desenvolv
 - Ordem de serviço da entrada do veículo até a entrega.
 - Relatórios por período e por serviços mais realizados.
 - Histórico de manutenção por veículo.
-- Autenticação com perfis de administrador, atendente e técnico.
+- Autenticação com perfis de administrador e atendente.
 
 ## Tecnologias
 

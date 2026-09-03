@@ -8,7 +8,7 @@ Branch: `feature/autenticacao`
 
 ## 1. Objetivo
 
-Entregar autenticação real com Supabase, sessão SSR, recuperação de senha, três perfis, contas inativas, administração de funcionários e proteção em três níveis: interface, servidor e banco com RLS.
+Entregar autenticação real com Supabase, sessão SSR, recuperação de senha, dois perfis, contas inativas, administração de funcionários e proteção em três níveis: interface, servidor e banco com RLS.
 
 O trabalho seguirá testes primeiro sempre que a unidade puder ser isolada. Cada tarefa deve terminar com testes relevantes aprovados e diff revisado. Nenhuma credencial será incluída no Git.
 
@@ -38,8 +38,6 @@ E2E_ADMIN_EMAIL=
 E2E_ADMIN_PASSWORD=
 E2E_ATENDENTE_EMAIL=
 E2E_ATENDENTE_PASSWORD=
-E2E_TECNICO_EMAIL=
-E2E_TECNICO_PASSWORD=
 ```
 
 Os valores reais ficarão em `.env.local`, já ignorado pelo Git, e nos segredos do ambiente de CI quando ele for criado. A chave secreta terá acesso somente por módulos `server-only`.
@@ -160,7 +158,7 @@ npm run typecheck
 
 ### Banco
 
-1. Criar enum `perfil_usuario` com `administrador`, `atendente` e `tecnico`.
+1. Criar enum de perfil com administrador e atendente.
 2. Criar `public.perfis_usuarios`, cuja chave primária referencia `auth.users(id)`.
 3. Adicionar nome, perfil, ativo, criado_em e atualizado_em.
 4. Criar restrições para nome não vazio e timestamps válidos.
@@ -183,7 +181,7 @@ npm run typecheck
 ### Testes primeiro
 
 - Anônimo não lê nem grava.
-- Atendente e técnico leem somente o próprio perfil.
+- Atendente lê somente o próprio perfil.
 - Administrador lista e altera outras contas.
 - Atendente não promove a si próprio.
 - Administrador não inativa a própria conta.
@@ -249,7 +247,7 @@ A migração será revisada antes do envio ao projeto remoto. Alterações poste
 
 - E-mail é normalizado.
 - Senha respeita a política definida.
-- Os três perfis recebem somente permissões esperadas.
+- Os dois perfis recebem somente permissões esperadas.
 - Perfil inativo é rejeitado.
 - Guarda diferencia não autenticado de não autorizado.
 
@@ -360,7 +358,7 @@ A migração será revisada antes do envio ao projeto remoto. Alterações poste
 
 - Somente administrador abre a página.
 - Entrada inválida não chama a Admin API.
-- Atendente e técnico não convidam nem alteram contas.
+- Atendente não convida nem altera contas.
 - Convite válido gera perfil correspondente.
 - Administrador altera outra conta, mas não inativa a própria.
 - Retornos ao navegador não contêm metadados internos ou tokens.
@@ -403,11 +401,10 @@ A migração será revisada antes do envio ao projeto remoto. Alterações poste
 1. Visitante abre login e não acessa dashboard.
 2. Administrador entra, vê Usuários e sai.
 3. Atendente entra e não vê nem acessa Usuários.
-4. Técnico entra e não vê nem acessa Usuários.
-5. Administrador convida um funcionário.
-6. Recuperação de senha conclui com link válido.
-7. Conta inativada perde acesso.
-8. Rotas de autenticação funcionam no tamanho desktop de referência e sem rolagem horizontal indevida.
+4. Administrador convida um funcionário.
+5. Recuperação de senha conclui com link válido.
+6. Conta inativada perde acesso.
+7. Rotas de autenticação funcionam no tamanho desktop de referência e sem rolagem horizontal indevida.
 
 ### Suíte final
 
@@ -451,4 +448,4 @@ A branch somente será enviada e integrada após a suíte final, a revisão do d
 
 ## 18. Definição de pronto
 
-A etapa estará pronta quando todos os dez critérios da especificação forem atendidos, o primeiro administrador estiver funcional, os três perfis forem demonstráveis, os testes positivos e negativos passarem e o código estiver pronto para Pull Request sem credenciais ou dados pessoais reais.
+A etapa estará pronta quando todos os dez critérios da especificação forem atendidos, o primeiro administrador estiver funcional, os dois perfis forem demonstráveis, os testes positivos e negativos passarem e o código estiver pronto para Pull Request sem credenciais ou dados pessoais reais.

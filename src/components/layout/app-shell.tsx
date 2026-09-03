@@ -40,7 +40,6 @@ const managementNavigation = [
 const roleLabel = {
   administrador: "Administrador",
   atendente: "Atendente",
-  tecnico: "Técnico",
 } as const;
 
 function initials(name: string) {

@@ -9,7 +9,6 @@ import { requirePermission } from "@/lib/auth/guards";
 const roleLabel = {
   administrador: "Administrador",
   atendente: "Atendente",
-  tecnico: "Técnico",
 };
 
 export default async function UsersPage() {

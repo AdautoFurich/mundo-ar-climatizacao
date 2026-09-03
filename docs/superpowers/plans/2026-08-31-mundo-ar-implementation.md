@@ -160,7 +160,7 @@ Integrar Supabase Auth, criar perfis de usuário e proteger as áreas privadas.
 
 - Criar ou vincular o projeto Supabase de desenvolvimento.
 - Preparar clientes Supabase para navegador e servidor.
-- Criar enumeração de perfis: administrador, atendente e técnico.
+- Criar enumeração de perfis: administrador e atendente.
 - Criar tabela de perfis ligada ao Supabase Auth.
 - Criar políticas RLS para perfis e funções auxiliares de autorização.
 - Implementar login, logout, renovação da sessão e redirecionamento.
@@ -178,7 +178,7 @@ Integrar Supabase Auth, criar perfis de usuário e proteger as áreas privadas.
 
 ### Critério de conclusão
 
-Os três perfis entram no sistema e a autorização é aplicada na interface, no servidor e no banco.
+Os dois perfis entram no sistema e a autorização é aplicada na interface, no servidor e no banco.
 
 ## 7. Etapa 3 — Cadastro de clientes
 
@@ -216,7 +216,7 @@ Entregar o primeiro cadastro completo e estabelecer o padrão reutilizável para
 
 ### Critério de conclusão
 
-Administrador e atendente gerenciam clientes; técnico possui somente a consulta necessária ao seu trabalho.
+Administrador e atendente gerenciam clientes.
 
 ## 8. Etapa 4 — Cadastro de veículos
 
@@ -275,7 +275,7 @@ Criar o catálogo usado na composição das ordens de serviço.
 - Implementar nome, descrição, categoria, valor-base e situação.
 - Implementar listagem, busca, filtro por categoria e situação.
 - Permitir administração somente ao administrador.
-- Permitir consulta ao atendente e ao técnico.
+- Permitir consulta ao atendente.
 - Preservar serviços inativos para o histórico.
 
 ### Testes
@@ -321,7 +321,7 @@ Entregar o processo central desde a entrada do veículo até sua conclusão ou c
 
 - Criar listagem por número, cliente, placa, status e período.
 - Implementar abertura com cliente, veículo, reclamação, quilometragem e observações.
-- Implementar atribuição de atendente e técnico.
+- Implementar atribuição de responsável pelo atendimento e pela execução.
 - Implementar diagnóstico e composição de itens.
 - Calcular subtotal e total no servidor.
 - Implementar autorização ou recusa com meio, data e responsável.

@@ -48,17 +48,18 @@ async function cleanup() {
 
 try {
   const administrator = await createTestUser("administrador", "administrador");
-  const technician = await createTestUser("tecnico", "tecnico");
   const attendant = await createTestUser("atendente", "atendente");
 
-  const technicianClient = await authenticatedClient(technician.email);
-  const { data: technicianView, error: technicianViewError } =
-    await technicianClient.from("perfis_usuarios").select("id, perfil");
-  assert.ifError(technicianViewError);
-  assert.deepEqual(technicianView?.map(({ id }) => id), [technician.id]);
+  const attendantClient = await authenticatedClient(attendant.email);
+  const { data: attendantView, error: attendantViewError } =
+    await attendantClient.from("perfis_usuarios").select("id, perfil");
+  assert.ifError(attendantViewError);
+  assert.deepEqual(attendantView, [
+    { id: attendant.id, perfil: "atendente" },
+  ]);
 
   const { data: forbiddenUpdate, error: forbiddenUpdateError } =
-    await technicianClient
+    await attendantClient
       .from("perfis_usuarios")
       .update({ ativo: false })
       .eq("id", administrator.id)
@@ -89,7 +90,20 @@ try {
   assert.ifError(allowedUpdateError);
   assert.equal(allowedUpdate?.ativo, false);
 
-  console.log("RLS validado: isolamento individual e administração autorizada.");
+  const { data: persistedProfiles, error: persistedProfilesError } =
+    await adminApi.from("perfis_usuarios").select("perfil");
+  assert.ifError(persistedProfilesError);
+  assert.equal(
+    persistedProfiles?.every(({ perfil }) =>
+      ["administrador", "atendente"].includes(perfil),
+    ),
+    true,
+    "O banco deve conter somente os perfis administrador e atendente.",
+  );
+
+  console.log(
+    "RLS validado: dois perfis, isolamento individual e administração autorizada.",
+  );
 } finally {
   await cleanup();
 }

@@ -6,7 +6,7 @@ Base: `docs/superpowers/specs/2026-08-31-mundo-ar-sistema-oficina-design.md`
 
 ## 1. Objetivo
 
-Entregar o primeiro cadastro operacional completo da Mundo Ar Climatização e estabelecer um padrão reutilizável para veículos e serviços. O módulo permitirá cadastrar, consultar, pesquisar, editar, inativar e reativar clientes pessoas físicas, respeitando os perfis administrador, atendente e técnico.
+Entregar o primeiro cadastro operacional completo da Mundo Ar Climatização e estabelecer um padrão reutilizável para veículos e serviços. O módulo permitirá cadastrar, consultar, pesquisar, editar, inativar e reativar clientes pessoas físicas, respeitando os perfis administrador e atendente.
 
 ## 2. Escopo
 
@@ -40,7 +40,6 @@ Fora do escopo:
 | --- | --- | --- | --- | --- |
 | Administrador | Sim | Sim | Sim | Sim |
 | Atendente | Sim | Sim | Sim | Sim |
-| Técnico | Sim | Não | Não | Não |
 
 A interface refletirá as permissões, mas toda operação será novamente autorizada no servidor e pelo RLS.
 
@@ -169,7 +168,6 @@ Envio duplicado será impedido por estado pendente e controles desabilitados.
 
 - Usuários ativos autorizados podem consultar.
 - Administrador e atendente ativos podem inserir e atualizar.
-- Técnico não pode inserir nem atualizar.
 - Nenhum usuário autenticado pode excluir clientes pela API comum.
 - As políticas consultam `perfis_usuarios`.
 - Operações normais não usam a chave administrativa secreta.
@@ -201,7 +199,6 @@ Testes de componentes:
 Testes de RLS:
 
 - Administrador e atendente consultam e gerenciam.
-- Técnico consulta e não grava.
 - Exclusão física é bloqueada.
 - CPF duplicado é rejeitado.
 - Inativação preserva o registro.
@@ -209,7 +206,6 @@ Testes de RLS:
 Testes ponta a ponta:
 
 - Cadastro, busca, edição, inativação e reativação.
-- Técnico somente consulta.
 - Layout sem rolagem horizontal em desktop e celular.
 
 A etapa estará concluída quando as permissões forem respeitadas, todas as operações funcionarem com o Supabase real, a suíte passar e não houver segredos ou dados temporários versionados.
