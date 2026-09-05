@@ -1,4 +1,4 @@
-# Mundo Ar Climatização
+# Mundo Ar Climatização.
 
 Sistema web de apoio à operação da oficina Mundo Ar Climatização, desenvolvido como projeto de TCC do curso de Análise e Desenvolvimento de Sistemas.
 
