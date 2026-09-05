@@ -64,9 +64,10 @@ npm run test
 npm run build
 npm run test:e2e
 npm run test:rls
+npm run test:clients:rls
 ```
 
-`test:rls` usa o projeto de desenvolvimento configurado no `.env.local`, cria contas sintéticas e as remove ao final.
+`test:rls` e `test:clients:rls` usam o projeto de desenvolvimento configurado no `.env.local`, criam dados sintéticos e os removem ao final.
 
 ## Documentação
 
@@ -74,6 +75,7 @@ npm run test:rls
 - Plano do sistema: `docs/superpowers/plans/2026-08-31-mundo-ar-implementation.md`.
 - Especificação de autenticação: `docs/superpowers/specs/2026-09-01-autenticacao-supabase-design.md`.
 - Plano de autenticação: `docs/superpowers/plans/2026-09-01-autenticacao-supabase-implementation.md`.
+- Especificação de clientes: `docs/superpowers/specs/2026-09-01-cadastro-clientes-design.md`.
 
 ## Branches
 

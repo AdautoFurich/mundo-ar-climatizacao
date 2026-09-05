@@ -28,7 +28,7 @@ describe("Dashboard inicial", () => {
       screen.getByRole("button", { name: "Nova ordem de serviço" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Novo cliente" }),
+      screen.getByRole("link", { name: "Novo cliente" }),
     ).toBeInTheDocument();
     expect(screen.getAllByText("Aguardando aprovação")).toHaveLength(2);
     expect(screen.getByRole("heading", { name: "Ordens recentes" })).toBeInTheDocument();

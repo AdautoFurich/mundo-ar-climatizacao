@@ -27,7 +27,7 @@ const operationNavigation = [
   { label: "Visão geral", icon: Gauge, href: "/" },
   { label: "Ordens de serviço", icon: ClipboardList },
   { label: "Diagnósticos", icon: Stethoscope },
-  { label: "Clientes", icon: Users },
+  { label: "Clientes", icon: Users, href: "/clientes" },
   { label: "Veículos", icon: CarFront },
   { label: "Serviços", icon: Wrench },
 ] as const;
@@ -67,17 +67,20 @@ function NavigationGroup({
   label: string;
 }) {
   return (
-    <div>
-      <p className="mb-2 px-3 text-2xs font-bold uppercase tracking-[0.18em] text-teal-300">
+    <div className="sidebar-navigation-group">
+      <p className="sidebar-navigation-heading mb-2 px-3 text-2xs font-bold uppercase tracking-[0.18em] text-teal-300">
         {label}
       </p>
       <nav aria-label={label}>
-        <ul className="grid gap-1">
+        <ul className="sidebar-navigation-list grid gap-1">
           {items.map((item) => {
             const Icon = item.icon;
-            const active = item.href === currentPath;
+            const active =
+              item.href === "/"
+                ? currentPath === "/"
+                : Boolean(item.href && currentPath.startsWith(item.href));
             const classes = cn(
-              "relative flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300",
+              "sidebar-navigation-link relative flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300",
               active
                 ? "border-l-2 border-teal-300 bg-teal-500/25 text-white"
                 : item.href
@@ -131,24 +134,24 @@ function SidebarContent({
 
   return (
     <>
-      <div className="flex h-[8.5rem] shrink-0 items-center justify-center border-b border-white/10">
-        <BrandLogo className="w-32" />
+      <div className="sidebar-brand flex h-[8.5rem] shrink-0 items-center justify-center border-b border-white/10">
+        <BrandLogo className="sidebar-brand-logo w-32" />
       </div>
 
-      <div className="flex-1 space-y-5 overflow-y-auto px-3 py-5">
+      <div className="sidebar-navigation flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-5 lg:overflow-visible">
         <NavigationGroup
           currentPath={currentPath}
           items={operationNavigation}
           label="Operação da oficina"
         />
-        <div className="border-t border-white/8 pt-5">
+        <div className="sidebar-navigation-section border-t border-white/8 pt-5">
           <NavigationGroup
             currentPath={currentPath}
             items={managementNavigation}
             label="Gestão"
           />
         </div>
-        <div className="border-t border-white/8 pt-5">
+        <div className="sidebar-navigation-section border-t border-white/8 pt-5">
           <NavigationGroup
             currentPath={currentPath}
             items={configurationItems}
@@ -157,8 +160,8 @@ function SidebarContent({
         </div>
       </div>
 
-      <div className="shrink-0 space-y-2 px-3 pb-5">
-        <div className="rounded-lg border border-white/20 bg-white/[0.035] p-3">
+      <div className="sidebar-footer shrink-0 space-y-2 px-3 pb-5">
+        <div className="sidebar-environment rounded-lg border border-white/20 bg-white/[0.035] p-3">
           <div className="flex items-start gap-2.5">
             <div
               aria-hidden="true"
@@ -168,7 +171,7 @@ function SidebarContent({
             </div>
             <div>
               <p className="text-xs font-semibold text-white">Ambiente interno</p>
-              <p className="mt-0.5 text-xs leading-4 text-slate-300">
+              <p className="sidebar-environment-copy mt-0.5 text-xs leading-4 text-slate-300">
                 Acesso restrito e monitorado
               </p>
             </div>
@@ -176,7 +179,7 @@ function SidebarContent({
         </div>
         <form action={logoutAction}>
           <button
-            className="flex min-h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium text-slate-200 transition-colors hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
+            className="sidebar-logout flex min-h-10 w-full items-center gap-3 rounded-lg px-3 text-sm font-medium text-slate-200 transition-colors hover:bg-white/8 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300"
             type="submit"
           >
             <LogOut aria-hidden="true" className="size-[1.1rem]" />
@@ -285,7 +288,10 @@ export function AppShell({
         Ir para o conteúdo
       </a>
 
-      <aside className="fixed inset-y-0 left-0 z-40 hidden w-56 flex-col overflow-hidden bg-[var(--brand-strong)] lg:flex">
+      <aside
+        className="sidebar-desktop fixed inset-y-0 left-0 z-40 hidden w-56 flex-col overflow-hidden bg-[var(--brand-strong)] lg:flex"
+        data-testid="desktop-sidebar"
+      >
         <SidebarContent currentPath={currentPath} user={user} />
       </aside>
 

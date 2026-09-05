@@ -12,6 +12,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:rls": "node --env-file=.env.local scripts/validar-rls.mjs",
+    "test:clients:rls": "node --env-file=.env.local scripts/validar-clientes-rls.mjs",
     "admin:create": "node --env-file=.env.local scripts/criar-primeiro-administrador.mjs"
   },
   "dependencies": {

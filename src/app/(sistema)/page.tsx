@@ -19,6 +19,7 @@ import {
   Wrench,
   Clock3,
 } from "lucide-react";
+import Link from "next/link";
 
 import { AppShell } from "@/components/layout/app-shell";
 import { Button } from "@/components/ui/button";
@@ -270,7 +271,7 @@ export default async function Home() {
         <div className="mx-auto max-w-[96rem]">
           <section className="flex flex-wrap items-center justify-end gap-2.5 pb-3">
             <Button className="disabled:opacity-100" disabled type="button"><ClipboardPlus aria-hidden="true" className="size-4" />Nova ordem de serviço</Button>
-            <Button className="disabled:opacity-100" disabled type="button" variant="secondary"><UserPlus aria-hidden="true" className="size-4" />Novo cliente</Button>
+            <Link className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border bg-white px-4 text-sm font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--surface-subtle)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)] focus-visible:ring-offset-2" href="/clientes"><UserPlus aria-hidden="true" className="size-4" />Novo cliente</Link>
           </section>
           <section aria-labelledby="resumo-operacional">
             <h2 className="sr-only" id="resumo-operacional">Resumo operacional</h2>

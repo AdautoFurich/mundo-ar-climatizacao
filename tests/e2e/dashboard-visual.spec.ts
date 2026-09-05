@@ -73,6 +73,25 @@ test.describe("dashboard autenticado", () => {
     });
 
     for (const viewport of [
+      { width: 1366, height: 768 },
+      { width: 1280, height: 720 },
+      { width: 1024, height: 600 },
+    ]) {
+      await page.setViewportSize(viewport);
+
+      const sidebar = page.getByTestId("desktop-sidebar");
+      await expect(sidebar).toBeVisible();
+      await expect(sidebar.getByRole("button", { name: "Sair" })).toBeVisible();
+      await expect
+        .poll(() =>
+          sidebar.evaluate(
+            (element) => element.scrollHeight <= element.clientHeight,
+          ),
+        )
+        .toBe(true);
+    }
+
+    for (const viewport of [
       { width: 375, height: 812 },
       { width: 844, height: 390 },
     ]) {
