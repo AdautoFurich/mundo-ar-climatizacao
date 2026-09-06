@@ -12,6 +12,7 @@ export const PERMISSIONS = [
   "ordens:consultar",
   "ordens:atender",
   "ordens:executar",
+  "ordens:administrar",
   "relatorios:consultar",
 ] as const;
 

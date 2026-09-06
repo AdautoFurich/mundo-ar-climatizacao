@@ -20,4 +20,9 @@ describe("matriz de permissões", () => {
     expect(can("atendente", "ordens:atender")).toBe(true);
     expect(can("atendente", "ordens:executar")).toBe(true);
   });
+
+  it("reserva a administração excepcional das ordens ao administrador", () => {
+    expect(can("administrador", "ordens:administrar")).toBe(true);
+    expect(can("atendente", "ordens:administrar")).toBe(false);
+  });
 });
