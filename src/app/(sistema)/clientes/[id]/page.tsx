@@ -6,6 +6,7 @@ import {
   FileText,
   MapPin,
   Pencil,
+  Plus,
   UserRound,
 } from "lucide-react";
 import Link from "next/link";
@@ -20,6 +21,8 @@ import {
   formatZipCode,
 } from "@/features/clientes/formatters";
 import { getClientById } from "@/features/clientes/queries";
+import { formatPlate, formatVehicleYear } from "@/features/veiculos/formatters";
+import { listVehiclesByOwner } from "@/features/veiculos/queries";
 import { requirePermission } from "@/lib/auth/guards";
 
 function DetailItem({ label, value }: { label: string; value?: string | null }) {
@@ -64,7 +67,10 @@ export default async function ClientDetailsPage({
 }) {
   const user = await requirePermission("clientes:consultar");
   const [{ id }, messages] = await Promise.all([params, searchParams]);
-  const client = await getClientById(id);
+  const [client, vehicles] = await Promise.all([
+    getClientById(id),
+    listVehiclesByOwner(id),
+  ]);
   if (!client) notFound();
 
   const successMessage = messages.criado
@@ -169,15 +175,73 @@ export default async function ClientDetailsPage({
               </Section>
 
               <Section icon={CarFront} title="Veículos do cliente">
-                <div className="rounded-lg border border-dashed bg-[var(--surface-subtle)] px-4 py-7 text-center">
-                  <CarFront aria-hidden="true" className="mx-auto size-7 text-[var(--ink-faint)]" />
-                  <p className="mt-2 text-sm font-semibold text-[var(--brand)]">
-                    Cadastro de veículos será a próxima etapa
+                {vehicles.length === 0 ? (
+                  <div className="rounded-lg border border-dashed bg-[var(--surface-subtle)] px-4 py-6 text-center">
+                    <CarFront
+                      aria-hidden="true"
+                      className="mx-auto size-7 text-[var(--ink-faint)]"
+                    />
+                    <p className="mt-2 text-sm font-semibold text-[var(--brand)]">
+                      Nenhum veículo vinculado
+                    </p>
+                    <p className="mt-1 text-xs text-[var(--ink-muted)]">
+                      Os veículos deste proprietário aparecerão aqui.
+                    </p>
+                  </div>
+                ) : (
+                  <ul className="space-y-2">
+                    {vehicles.map((vehicle) => (
+                      <li key={vehicle.id}>
+                        <Link
+                          className="flex min-h-14 items-center gap-3 rounded-lg border px-3 py-2.5 hover:bg-[var(--surface-subtle)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+                          href={`/veiculos/${vehicle.id}`}
+                        >
+                          <span
+                            aria-hidden="true"
+                            className="grid size-9 shrink-0 place-items-center rounded-lg bg-teal-50 text-[var(--action)]"
+                          >
+                            <CarFront className="size-4" />
+                          </span>
+                          <span className="min-w-0 flex-1">
+                            <span className="block text-sm font-bold tracking-[0.04em] text-[var(--brand)]">
+                              {formatPlate(vehicle.plate)}
+                            </span>
+                            <span className="block truncate text-xs text-[var(--ink-muted)]">
+                              {vehicle.brand} {vehicle.model} ·{" "}
+                              {formatVehicleYear(
+                                vehicle.manufactureYear,
+                                vehicle.modelYear,
+                              )}
+                            </span>
+                          </span>
+                          <span
+                            className={`rounded-full px-2 py-1 text-xs font-bold ${
+                              vehicle.active
+                                ? "bg-green-50 text-[var(--success)]"
+                                : "bg-slate-100 text-slate-600"
+                            }`}
+                          >
+                            {vehicle.active ? "Ativo" : "Inativo"}
+                          </span>
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+
+                {client.active ? (
+                  <Link
+                    className="mt-3 inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg border border-teal-200 bg-teal-50 px-4 text-sm font-semibold text-[var(--action)] hover:bg-teal-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+                    href={`/veiculos/novo?cliente=${client.id}`}
+                  >
+                    <Plus aria-hidden="true" className="size-4" />
+                    Cadastrar veículo para este cliente
+                  </Link>
+                ) : (
+                  <p className="mt-3 text-xs text-[var(--ink-muted)]">
+                    Reative o cliente para cadastrar um novo veículo em seu nome.
                   </p>
-                  <p className="mt-1 text-xs text-[var(--ink-muted)]">
-                    Os veículos vinculados aparecerão aqui sem alterar este cadastro.
-                  </p>
-                </div>
+                )}
               </Section>
 
               <Section icon={CalendarClock} title="Registro">
