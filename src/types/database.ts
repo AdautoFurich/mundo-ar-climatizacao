@@ -1,4 +1,5 @@
 import type { UserRole } from "@/features/auth/types";
+import type { ServiceCategory } from "@/features/servicos/schemas";
 
 export type Database = {
   public: {
@@ -155,6 +156,36 @@ export type Database = {
           atualizado_em?: string;
           nome?: string;
           perfil?: UserRole;
+        };
+        Relationships: [];
+      };
+      servicos: {
+        Row: {
+          ativo: boolean;
+          atualizado_em: string;
+          categoria: ServiceCategory;
+          criado_em: string;
+          descricao: string | null;
+          id: string;
+          nome: string;
+          valor_base: number | null;
+        };
+        Insert: {
+          ativo?: boolean;
+          atualizado_em?: string;
+          categoria: ServiceCategory;
+          criado_em?: string;
+          descricao?: string | null;
+          id?: string;
+          nome: string;
+          valor_base?: number | null;
+        };
+        Update: {
+          ativo?: boolean;
+          categoria?: ServiceCategory;
+          descricao?: string | null;
+          nome?: string;
+          valor_base?: number | null;
         };
         Relationships: [];
       };

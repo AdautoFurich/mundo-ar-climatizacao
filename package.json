@@ -14,6 +14,7 @@
     "test:rls": "node --env-file=.env.local scripts/validar-rls.mjs",
     "test:clients:rls": "node --env-file=.env.local scripts/validar-clientes-rls.mjs",
     "test:vehicles:rls": "node --env-file=.env.local scripts/validar-veiculos-rls.mjs",
+    "test:services:rls": "node --env-file=.env.local scripts/validar-servicos-rls.mjs",
     "admin:create": "node --env-file=.env.local scripts/criar-primeiro-administrador.mjs"
   },
   "dependencies": {
