@@ -76,6 +76,7 @@ npm run test:clients:rls
 - Especificação de autenticação: `docs/superpowers/specs/2026-09-01-autenticacao-supabase-design.md`.
 - Plano de autenticação: `docs/superpowers/plans/2026-09-01-autenticacao-supabase-implementation.md`.
 - Especificação de clientes: `docs/superpowers/specs/2026-09-01-cadastro-clientes-design.md`.
+- Especificação de veículos: `docs/superpowers/specs/2026-09-06-cadastro-veiculos-design.md`.
 
 ## Branches
 
