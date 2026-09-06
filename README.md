@@ -16,6 +16,7 @@ Sistema web de apoio à operação da oficina Mundo Ar Climatização, desenvolv
 - Dashboard operacional responsivo.
 - Cadastro de clientes pessoas físicas.
 - Cadastro de veículos, com transferência auditada de proprietário.
+- Catálogo de serviços, com categorias e valores-base opcionais.
 
 ## Tecnologias
 
@@ -73,6 +74,7 @@ npm run test:e2e
 npm run test:rls
 npm run test:clients:rls
 npm run test:vehicles:rls
+npm run test:services:rls
 ```
 
 Os comandos de teste RLS usam o projeto de desenvolvimento configurado no `.env.local`, criam dados sintéticos e os removem ao final.
