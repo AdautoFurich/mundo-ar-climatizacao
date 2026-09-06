@@ -30,7 +30,7 @@ const operationNavigation = [
   { label: "Diagnósticos", icon: Stethoscope },
   { label: "Clientes", icon: Users, href: "/clientes" },
   { label: "Veículos", icon: CarFront, href: "/veiculos" },
-  { label: "Serviços", icon: Wrench },
+  { label: "Serviços", icon: Wrench, href: "/servicos" },
 ] as const;
 
 const managementNavigation = [

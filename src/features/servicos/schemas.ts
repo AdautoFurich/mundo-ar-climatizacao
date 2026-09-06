@@ -66,9 +66,12 @@ const basePriceSchema = z.string().trim().transform((value, context) => {
 
 export const serviceFormSchema = z.object({
   name: requiredText("Informe o nome do serviço.", 100),
-  category: z.enum(SERVICE_CATEGORY_VALUES, {
-    error: "Selecione uma categoria válida.",
-  }),
+  category: z
+    .enum([...SERVICE_CATEGORY_VALUES, ""], {
+      error: "Selecione uma categoria válida.",
+    })
+    .refine((value) => value !== "", "Selecione uma categoria válida.")
+    .transform((value) => value as ServiceCategory),
   description: optionalText(1000),
   basePrice: basePriceSchema,
 });
