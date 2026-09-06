@@ -151,13 +151,22 @@ export async function getVehicleById(id: string): Promise<VehicleDetails | null>
   return toDetails(row, names.get(row.cliente_id) ?? "Cliente não encontrado");
 }
 
-export async function listActiveClientOptions(): Promise<ActiveClientOption[]> {
+export async function listActiveClientOptions(
+  includeClientId?: string,
+): Promise<ActiveClientOption[]> {
   await requirePermission("veiculos:gerenciar");
   const supabase = await createClient();
-  const { data, error } = await supabase
+  let query = supabase
     .from("clientes")
-    .select("id, nome, cpf")
-    .eq("ativo", true)
+    .select("id, nome, cpf");
+
+  if (includeClientId && vehicleIdSchema.safeParse(includeClientId).success) {
+    query = query.or(`ativo.eq.true,id.eq.${includeClientId}`);
+  } else {
+    query = query.eq("ativo", true);
+  }
+
+  const { data, error } = await query
     .order("nome")
     .limit(500);
 

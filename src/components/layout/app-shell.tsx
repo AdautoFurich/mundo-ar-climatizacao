@@ -16,6 +16,7 @@ import {
   Wrench,
 } from "lucide-react";
 import type { ReactNode } from "react";
+import Link from "next/link";
 
 import { BrandLogo } from "@/components/brand/brand-logo";
 import { logoutAction } from "@/features/auth/actions";
@@ -28,7 +29,7 @@ const operationNavigation = [
   { label: "Ordens de serviço", icon: ClipboardList },
   { label: "Diagnósticos", icon: Stethoscope },
   { label: "Clientes", icon: Users, href: "/clientes" },
-  { label: "Veículos", icon: CarFront },
+  { label: "Veículos", icon: CarFront, href: "/veiculos" },
   { label: "Serviços", icon: Wrench },
 ] as const;
 
@@ -91,14 +92,14 @@ function NavigationGroup({
             return (
               <li key={item.label}>
                 {item.href ? (
-                  <a
+                  <Link
                     aria-current={active ? "page" : undefined}
                     className={classes}
                     href={item.href}
                   >
                     <Icon aria-hidden="true" className="size-[1.1rem] shrink-0" />
                     {item.label}
-                  </a>
+                  </Link>
                 ) : (
                   <span
                     aria-disabled="true"
