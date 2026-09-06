@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 
@@ -24,6 +24,11 @@ const clients = [
 ];
 
 describe("transferência de veículo", () => {
+  beforeEach(() => {
+    transferVehicleAction.mockReset();
+    transferVehicleAction.mockResolvedValue({ status: "idle" });
+  });
+
   it("não oferece o proprietário atual como destino", () => {
     render(
       <VehicleTransferForm
@@ -52,5 +57,30 @@ describe("transferência de veículo", () => {
       await screen.findByText("Selecione um novo proprietário válido."),
     ).toBeInTheDocument();
     expect(transferVehicleAction).not.toHaveBeenCalled();
+  });
+
+  it("envia o veículo e o novo proprietário selecionado", async () => {
+    const user = userEvent.setup();
+    vi.spyOn(window, "confirm").mockReturnValue(true);
+    render(
+      <VehicleTransferForm
+        clients={clients}
+        currentOwnerId={clients[0].id}
+        vehicleId="17a58c52-6c6d-43a3-a5c4-e71a464b45f2"
+      />,
+    );
+
+    await user.selectOptions(
+      screen.getByRole("combobox", { name: /Novo proprietário/ }),
+      clients[1].id,
+    );
+    await user.click(screen.getByRole("button", { name: "Transferir veículo" }));
+
+    await waitFor(() => expect(transferVehicleAction).toHaveBeenCalled());
+    const formData = transferVehicleAction.mock.calls[0][1] as FormData;
+    expect(formData.get("vehicleId")).toBe(
+      "17a58c52-6c6d-43a3-a5c4-e71a464b45f2",
+    );
+    expect(formData.get("newOwnerId")).toBe(clients[1].id);
   });
 });
