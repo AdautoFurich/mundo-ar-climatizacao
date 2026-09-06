@@ -87,6 +87,7 @@ Os comandos de teste RLS usam o projeto de desenvolvimento configurado no `.env.
 - Especificação de veículos: `docs/superpowers/specs/2026-09-06-cadastro-veiculos-design.md`.
 - Plano de veículos: `docs/superpowers/plans/2026-09-06-cadastro-veiculos-implementation.md`.
 - Especificação de serviços: `docs/superpowers/specs/2026-09-06-cadastro-servicos-design.md`.
+- Plano de serviços: `docs/superpowers/plans/2026-09-06-cadastro-servicos-implementation.md`.
 
 ## Branches
 
