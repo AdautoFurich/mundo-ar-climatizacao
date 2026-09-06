@@ -3,6 +3,32 @@ import type { UserRole } from "@/features/auth/types";
 export type Database = {
   public: {
     Tables: {
+      historico_proprietarios_veiculos: {
+        Row: {
+          cliente_anterior_id: string;
+          cliente_novo_id: string;
+          id: string;
+          transferido_em: string;
+          usuario_id: string;
+          veiculo_id: string;
+        };
+        Insert: {
+          cliente_anterior_id: string;
+          cliente_novo_id: string;
+          id?: string;
+          transferido_em?: string;
+          usuario_id: string;
+          veiculo_id: string;
+        };
+        Update: {
+          cliente_anterior_id?: string;
+          cliente_novo_id?: string;
+          transferido_em?: string;
+          usuario_id?: string;
+          veiculo_id?: string;
+        };
+        Relationships: [];
+      };
       clientes: {
         Row: {
           ativo: boolean;
@@ -61,6 +87,52 @@ export type Database = {
         };
         Relationships: [];
       };
+      veiculos: {
+        Row: {
+          ano_fabricacao: number;
+          ano_modelo: number;
+          ativo: boolean;
+          atualizado_em: string;
+          cliente_id: string;
+          combustivel: string | null;
+          cor: string | null;
+          criado_em: string;
+          id: string;
+          marca: string;
+          modelo: string;
+          observacoes: string | null;
+          placa: string;
+        };
+        Insert: {
+          ano_fabricacao: number;
+          ano_modelo: number;
+          ativo?: boolean;
+          atualizado_em?: string;
+          cliente_id: string;
+          combustivel?: string | null;
+          cor?: string | null;
+          criado_em?: string;
+          id?: string;
+          marca: string;
+          modelo: string;
+          observacoes?: string | null;
+          placa: string;
+        };
+        Update: {
+          ano_fabricacao?: number;
+          ano_modelo?: number;
+          ativo?: boolean;
+          atualizado_em?: string;
+          cliente_id?: string;
+          combustivel?: string | null;
+          cor?: string | null;
+          marca?: string;
+          modelo?: string;
+          observacoes?: string | null;
+          placa?: string;
+        };
+        Relationships: [];
+      };
       perfis_usuarios: {
         Row: {
           ativo: boolean;
@@ -88,7 +160,15 @@ export type Database = {
       };
     };
     Views: Record<string, never>;
-    Functions: Record<string, never>;
+    Functions: {
+      transferir_proprietario_veiculo: {
+        Args: {
+          p_novo_cliente_id: string;
+          p_veiculo_id: string;
+        };
+        Returns: string;
+      };
+    };
     Enums: {
       perfil_usuario: UserRole;
     };
