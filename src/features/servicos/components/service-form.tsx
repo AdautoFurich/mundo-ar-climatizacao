@@ -101,7 +101,8 @@ export function ServiceForm({
     if (firstField) form.setFocus(firstField as keyof ServiceFormValues);
   }, [form, state.fieldErrors]);
 
-  const submit = form.handleSubmit((values) => {
+  const submit = form.handleSubmit(() => {
+    const values = form.getValues();
     const data = new FormData();
     Object.entries(values).forEach(([key, value]) => {
       data.set(key, String(value ?? ""));

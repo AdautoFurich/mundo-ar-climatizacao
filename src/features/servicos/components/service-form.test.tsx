@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { vi } from "vitest";
 
@@ -15,6 +15,8 @@ describe("formulário de serviço", () => {
   beforeEach(() => {
     createServiceAction.mockReset();
     updateServiceAction.mockReset();
+    createServiceAction.mockResolvedValue({ status: "idle" });
+    updateServiceAction.mockResolvedValue({ status: "idle" });
   });
 
   it("apresenta os campos e as categorias do catálogo", () => {
@@ -54,5 +56,19 @@ describe("formulário de serviço", () => {
     expect(screen.getByLabelText(/Nome do serviço/)).toHaveValue("Carga de gás");
     expect(screen.getByLabelText(/Valor-base/)).toHaveValue("250,00");
     expect(screen.getByRole("button", { name: "Salvar alterações" })).toBeVisible();
+  });
+
+  it("envia o valor monetário no formato digitado", async () => {
+    const user = userEvent.setup();
+    render(<ServiceForm />);
+
+    await user.type(screen.getByLabelText(/Nome do serviço/), "Carga de gás");
+    await user.selectOptions(screen.getByLabelText(/Categoria/), "climatizacao");
+    await user.type(screen.getByLabelText(/Valor-base/), "250,00");
+    await user.click(screen.getByRole("button", { name: "Cadastrar serviço" }));
+
+    await waitFor(() => expect(createServiceAction).toHaveBeenCalled());
+    const formData = createServiceAction.mock.calls[0][1] as FormData;
+    expect(formData.get("basePrice")).toBe("250,00");
   });
 });
