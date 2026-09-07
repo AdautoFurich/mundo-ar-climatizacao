@@ -351,3 +351,48 @@ summary {
     animation-iteration-count: 1 !important;
   }
 }
+
+@media print {
+  @page {
+    size: landscape;
+    margin: 12mm;
+  }
+
+  body,
+  html {
+    background: white;
+  }
+
+  .sidebar-desktop,
+  .app-header,
+  .report-no-print {
+    display: none !important;
+  }
+
+  .app-layout-offset {
+    padding-left: 0 !important;
+  }
+
+  .report-print-only,
+  .report-table {
+    display: block !important;
+  }
+
+  .report-print-area {
+    color: #172731;
+  }
+
+  .report-table,
+  .report-print-area dl > div {
+    box-shadow: none !important;
+  }
+
+  .report-table table {
+    min-width: 0 !important;
+  }
+
+  .report-table a {
+    color: inherit !important;
+    text-decoration: none !important;
+  }
+}

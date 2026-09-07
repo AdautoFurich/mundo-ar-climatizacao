@@ -34,7 +34,7 @@ const operationNavigation = [
 ] as const;
 
 const managementNavigation = [
-  { label: "Relatórios", icon: BarChart3 },
+  { label: "Relatórios", icon: BarChart3, href: "/relatorios/ordens-periodo" },
   { label: "Agenda", icon: CalendarDays },
 ] as const;
 
@@ -296,8 +296,8 @@ export function AppShell({
         <SidebarContent currentPath={currentPath} user={user} />
       </aside>
 
-      <div className="lg:pl-56">
-        <header className="sticky top-0 z-30 border-b bg-white/95 backdrop-blur">
+      <div className="app-layout-offset lg:pl-56">
+        <header className="app-header sticky top-0 z-30 border-b bg-white/95 backdrop-blur">
           <div className="flex min-h-[5.35rem] items-center gap-4 px-4 sm:px-6 lg:px-7">
             <details className="relative lg:hidden">
               <summary className="flex size-10 cursor-pointer list-none items-center justify-center rounded-lg border text-[var(--brand)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]">
