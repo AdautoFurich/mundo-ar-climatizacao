@@ -8,6 +8,19 @@ import { createClient } from "@/lib/supabase/server";
 import { orderIdSchema } from "../schemas";
 import type { OrderActionState } from "../types";
 
+function isConflict(error: { code?: string; message?: string } | null) {
+  return (
+    error?.code === "40001" ||
+    (error?.code === "P0001" && error.message?.includes("CONFLITO_VERSAO"))
+  );
+}
+
+function revalidateOrder(orderId: string) {
+  revalidatePath("/");
+  revalidatePath("/ordens-servico");
+  revalidatePath(`/ordens-servico/${orderId}`);
+}
+
 export async function startDiagnosisAction(
   orderId: string,
   expectedVersion: number,
@@ -34,7 +47,7 @@ export async function startDiagnosisAction(
     p_versao: expectedVersion,
   });
 
-  if (error?.code === "40001") {
+  if (isConflict(error)) {
     redirect(`/ordens-servico/${validId.data}?conflito=1`);
   }
   if (error || data === null) {
@@ -47,8 +60,41 @@ export async function startDiagnosisAction(
     };
   }
 
-  revalidatePath("/");
-  revalidatePath("/ordens-servico");
-  revalidatePath(`/ordens-servico/${validId.data}`);
+  revalidateOrder(validId.data);
   redirect(`/ordens-servico/${validId.data}?situacao=em_diagnostico`);
+}
+
+export async function sendQuoteForApprovalAction(
+  orderId: string,
+  expectedVersion: number,
+  previousState: OrderActionState,
+  formData: FormData,
+): Promise<OrderActionState> {
+  void previousState;
+  void formData;
+  await requirePermission("ordens:atender");
+  const validId = orderIdSchema.safeParse(orderId);
+  if (!validId.success || !Number.isSafeInteger(expectedVersion) || expectedVersion <= 0) {
+    return { status: "error", message: "Ordem de serviço inválida." };
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("avancar_ordem_servico", {
+    p_destino: "aguardando_aprovacao",
+    p_ordem_id: validId.data,
+    p_versao: expectedVersion,
+  });
+  if (isConflict(error)) redirect(`/ordens-servico/${validId.data}?conflito=1`);
+  if (error || data === null) {
+    return {
+      status: "error",
+      message:
+        error?.code === "23514"
+          ? "Registre o diagnóstico e adicione ao menos um item antes de enviar."
+          : "Não foi possível enviar o orçamento para aprovação agora.",
+    };
+  }
+
+  revalidateOrder(validId.data);
+  redirect(`/ordens-servico/${validId.data}?situacao=aguardando_aprovacao`);
 }

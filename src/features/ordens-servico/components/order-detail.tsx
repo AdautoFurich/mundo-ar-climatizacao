@@ -4,6 +4,7 @@ import {
   ClipboardCheck,
   FileSearch,
   KeyRound,
+  MessageCircleMore,
   PackageCheck,
   ReceiptText,
   Wrench,
@@ -14,6 +15,7 @@ import { formatPlate, formatVehicleYear } from "@/features/veiculos/formatters";
 import { cn } from "@/lib/utils";
 import {
   formatApprovalStatus,
+  formatApprovalChannel,
   formatFuelLevel,
   formatMileage,
   formatOrderDate,
@@ -115,11 +117,15 @@ function BudgetItem({ item }: { item: ServiceOrderItem }) {
 }
 
 export function OrderDetail({
+  approvalPanel,
   diagnosisForm,
   order,
+  quoteEditor,
 }: {
+  approvalPanel?: React.ReactNode;
   diagnosisForm?: React.ReactNode;
   order: ServiceOrderDetails;
+  quoteEditor?: React.ReactNode;
 }) {
   const items = order.items.filter((item) => !item.removedAt);
   const approvedItems = items.filter((item) => item.approvalStatus === "aprovado");
@@ -171,7 +177,7 @@ export function OrderDetail({
       </Section>
 
       <Section description="Serviços, materiais e decisões do cliente" icon={ReceiptText} title="Orçamento e autorizações">
-        {items.length === 0 ? (
+        {quoteEditor ?? (items.length === 0 ? (
           <div className="rounded-lg border border-dashed bg-[var(--surface-subtle)] px-4 py-7 text-center">
             <p className="text-sm font-semibold text-[var(--brand)]">Orçamento ainda não iniciado.</p>
             <p className="mt-1 text-xs text-[var(--ink-muted)]">Serviços e materiais serão adicionados após o diagnóstico.</p>
@@ -180,14 +186,44 @@ export function OrderDetail({
           <div className="overflow-hidden rounded-lg border">
             <ul>{items.map((item) => <BudgetItem item={item} key={item.id} />)}</ul>
           </div>
+        ))}
+        {!quoteEditor && (
+          <>
+            <dl className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              <div className="rounded-lg bg-[var(--surface-subtle)] px-3 py-3"><DetailItem label="Serviços" value={formatOrderMoney(order.servicesSubtotal)} /></div>
+              <div className="rounded-lg bg-[var(--surface-subtle)] px-3 py-3"><DetailItem label="Materiais" value={formatOrderMoney(order.materialsSubtotal)} /></div>
+              <div className="rounded-lg bg-[var(--surface-subtle)] px-3 py-3"><DetailItem label="Total orçado" value={formatOrderMoney(order.quotedTotal)} /></div>
+              <div className="rounded-lg border border-teal-100 bg-teal-50 px-3 py-3"><DetailItem label="Total autorizado" value={formatOrderMoney(order.authorizedTotal)} /></div>
+            </dl>
+            {order.discount > 0 && <p className="mt-3 text-right text-sm text-[var(--ink-muted)]">Desconto aplicado: <strong className="text-[var(--ink)]">{formatOrderMoney(order.discount)}</strong></p>}
+          </>
         )}
-        <dl className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-          <div className="rounded-lg bg-[var(--surface-subtle)] px-3 py-3"><DetailItem label="Serviços" value={formatOrderMoney(order.servicesSubtotal)} /></div>
-          <div className="rounded-lg bg-[var(--surface-subtle)] px-3 py-3"><DetailItem label="Materiais" value={formatOrderMoney(order.materialsSubtotal)} /></div>
-          <div className="rounded-lg bg-[var(--surface-subtle)] px-3 py-3"><DetailItem label="Total orçado" value={formatOrderMoney(order.quotedTotal)} /></div>
-          <div className="rounded-lg border border-teal-100 bg-teal-50 px-3 py-3"><DetailItem label="Total autorizado" value={formatOrderMoney(order.authorizedTotal)} /></div>
-        </dl>
-        {order.discount > 0 && <p className="mt-3 text-right text-sm text-[var(--ink-muted)]">Desconto aplicado: <strong className="text-[var(--ink)]">{formatOrderMoney(order.discount)}</strong></p>}
+        {approvalPanel && <div className="mt-4">{approvalPanel}</div>}
+        {order.approvals.length > 0 && (
+          <div className="mt-4 border-t pt-4">
+            <div className="flex items-center gap-2">
+              <MessageCircleMore aria-hidden="true" className="size-4 text-[var(--action)]" />
+              <h3 className="font-display text-base font-bold text-[var(--brand)]">Histórico de aprovações</h3>
+            </div>
+            <ol className="mt-3 space-y-2">
+              {order.approvals.map((approval) => {
+                const item = order.items.find((candidate) => candidate.id === approval.itemId);
+                return (
+                  <li className="rounded-lg border bg-[var(--surface-subtle)]/60 px-3.5 py-3" key={approval.id}>
+                    <div className="flex flex-wrap items-center justify-between gap-2">
+                      <p className="text-sm font-semibold text-[var(--ink)]">{item?.description ?? "Item não encontrado"}</p>
+                      <ItemStatus status={approval.decision} />
+                    </div>
+                    <p className="mt-1 text-xs text-[var(--ink-muted)]">
+                      {formatApprovalChannel(approval.channel)} · resposta em {formatOrderDate(approval.respondedAt)} · registrada por {approval.authorName}
+                    </p>
+                    {approval.notes && <p className="mt-2 text-sm text-[var(--ink-muted)]">{approval.notes}</p>}
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+        )}
       </Section>
 
       <Section description="Acompanhamento dos itens autorizados" icon={Wrench} title="Execução">

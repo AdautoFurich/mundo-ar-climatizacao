@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  formatApprovalChannel,
   formatApprovalStatus,
   formatFuelLevel,
   formatMileage,
@@ -35,6 +36,7 @@ describe("apresentação da ordem", () => {
   it("formata dados operacionais complementares", () => {
     expect(formatFuelLevel("metade")).toBe("1/2");
     expect(formatApprovalStatus("aprovado")).toBe("Aprovado");
+    expect(formatApprovalChannel("whatsapp")).toBe("WhatsApp");
     expect(formatPaymentMethod("cartao_credito")).toBe("Cartão de crédito");
     expect(formatOrderQuantity(1.25)).toBe("1,25");
   });

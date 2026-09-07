@@ -1,9 +1,16 @@
 import type {
+  ApprovalChannel,
   ApprovalStatus,
   FuelLevel,
   OrderStatus,
   PaymentMethod,
 } from "./types";
+
+export const APPROVAL_CHANNEL_LABELS: Record<ApprovalChannel, string> = {
+  whatsapp: "WhatsApp",
+  telefone: "Telefone",
+  presencial: "Presencial",
+};
 
 export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
   aberta: "Aberta",
@@ -93,6 +100,10 @@ export function formatFuelLevel(level: FuelLevel) {
 
 export function formatApprovalStatus(status: ApprovalStatus) {
   return APPROVAL_STATUS_LABELS[status];
+}
+
+export function formatApprovalChannel(channel: ApprovalChannel) {
+  return APPROVAL_CHANNEL_LABELS[channel];
 }
 
 export function formatPaymentMethod(method: PaymentMethod) {

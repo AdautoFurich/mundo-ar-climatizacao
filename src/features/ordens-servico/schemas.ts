@@ -259,6 +259,49 @@ export const approvalSchema = z.object({
   expectedVersion: z.coerce.number().int().positive(),
 });
 
+const approvalDecisionSchema = z.object({
+  itemId: z.string().uuid("Item inválido."),
+  decision: z.enum(["aprovado", "recusado"]),
+});
+
+const approvalDecisionsSchema = z
+  .string()
+  .transform((value, context) => {
+    try {
+      return JSON.parse(value) as unknown;
+    } catch {
+      context.addIssue({ code: "custom", message: "As decisões são inválidas." });
+      return z.NEVER;
+    }
+  })
+  .pipe(
+    z
+      .array(approvalDecisionSchema)
+      .min(1, "Escolha ao menos uma decisão.")
+      .max(500, "Há decisões demais neste envio."),
+  );
+
+export const approvalBatchSchema = z
+  .object({
+    decisions: approvalDecisionsSchema,
+    channel: z.enum(APPROVAL_CHANNEL_VALUES, {
+      error: "Selecione o canal da resposta.",
+    }),
+    respondedAt: dateTimeSchema("Informe a data e a hora da resposta."),
+    notes: optionalText(1000),
+    expectedVersion: z.coerce.number().int().positive(),
+  })
+  .superRefine((data, context) => {
+    const ids = data.decisions.map((decision) => decision.itemId);
+    if (new Set(ids).size !== ids.length) {
+      context.addIssue({
+        code: "custom",
+        path: ["decisions"],
+        message: "Cada item deve possuir apenas uma decisão.",
+      });
+    }
+  });
+
 export const discountSchema = z.object({
   discount: moneySchema,
   expectedVersion: z.coerce.number().int().positive(),
@@ -279,8 +322,10 @@ export const justifiedTransitionSchema = z.object({
 
 export type IntakeInput = z.input<typeof intakeSchema>;
 export type IntakeData = z.output<typeof intakeSchema>;
+export type OrderItemInput = z.input<typeof orderItemSchema>;
 export type OrderItemData = z.output<typeof orderItemSchema>;
 export type DiagnosisData = z.output<typeof diagnosisSchema>;
 export type DiagnosisInput = z.input<typeof diagnosisSchema>;
 export type ApprovalData = z.output<typeof approvalSchema>;
+export type ApprovalBatchData = z.output<typeof approvalBatchSchema>;
 export type DeliveryData = z.output<typeof deliverySchema>;

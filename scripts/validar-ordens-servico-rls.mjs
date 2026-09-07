@@ -294,20 +294,23 @@ try {
   assert.equal(waitingVersion, 6);
   console.log("[ordens:rls] validando aprovação, execução e entrega");
 
-  for (const [itemId, version] of [[serviceItem, 6], [materialItem, 7]]) {
-    console.log(`[ordens:rls] registrando aprovação da versão ${version}`);
-    const { error } = await attendantClient.rpc("registrar_aprovacao_item_ordem", {
+  console.log("[ordens:rls] registrando aprovações em lote");
+  const { data: approvalVersion, error: approvalError } = await attendantClient.rpc(
+    "registrar_aprovacoes_ordem",
+    {
       p_ordem_id: firstOrder,
-      p_item_id: itemId,
-      p_decisao: "aprovado",
+      p_decisoes: [
+        { itemId: serviceItem, decision: "aprovado" },
+        { itemId: materialItem, decision: "aprovado" },
+      ],
       p_canal: "whatsapp",
       p_respondido_em: "2026-09-06T16:00:00-03:00",
       p_observacoes: "Autorização sintética.",
-      p_versao: version,
-    });
-    assert.ifError(error);
-    console.log(`[ordens:rls] aprovação da versão ${version} registrada`);
-  }
+      p_versao: 6,
+    },
+  );
+  assert.ifError(approvalError);
+  assert.equal(approvalVersion, 7);
   console.log("[ordens:rls] conferindo totais aprovados");
   const { data: approvedOrder, error: approvedOrderError } = await administratorClient
     .from("ordens_servico")
@@ -320,24 +323,24 @@ try {
     subtotal_servicos: 250,
     subtotal_materiais: 100,
     total_autorizado: 330,
-    versao: 8,
+    versao: 7,
   });
 
   console.log("[ordens:rls] iniciando execução");
   assert.ifError((await attendantClient.rpc("avancar_ordem_servico", {
-    p_ordem_id: firstOrder, p_destino: "em_execucao", p_versao: 8,
+    p_ordem_id: firstOrder, p_destino: "em_execucao", p_versao: 7,
   })).error);
   console.log("[ordens:rls] concluindo primeiro item");
   assert.ifError((await attendantClient.rpc("marcar_item_executado", {
-    p_ordem_id: firstOrder, p_item_id: serviceItem, p_executado: true, p_versao: 9,
+    p_ordem_id: firstOrder, p_item_id: serviceItem, p_executado: true, p_versao: 8,
   })).error);
   console.log("[ordens:rls] concluindo segundo item");
   assert.ifError((await attendantClient.rpc("marcar_item_executado", {
-    p_ordem_id: firstOrder, p_item_id: materialItem, p_executado: true, p_versao: 10,
+    p_ordem_id: firstOrder, p_item_id: materialItem, p_executado: true, p_versao: 9,
   })).error);
   console.log("[ordens:rls] preparando retirada");
   assert.ifError((await attendantClient.rpc("avancar_ordem_servico", {
-    p_ordem_id: firstOrder, p_destino: "pronta_retirada", p_versao: 11,
+    p_ordem_id: firstOrder, p_destino: "pronta_retirada", p_versao: 10,
   })).error);
   console.log("[ordens:rls] registrando entrega");
   assert.ifError((await attendantClient.rpc("entregar_ordem_servico", {
@@ -345,17 +348,17 @@ try {
     p_forma: "pix",
     p_entregue_em: "2026-09-07T17:00:00-03:00",
     p_observacoes: null,
-    p_versao: 12,
+    p_versao: 11,
   })).error);
 
   const { error: attendantReopenError } = await attendantClient.rpc(
     "reabrir_ordem_servico",
-    { p_ordem_id: firstOrder, p_justificativa: "Teste", p_versao: 13 },
+    { p_ordem_id: firstOrder, p_justificativa: "Teste", p_versao: 12 },
   );
   assert.equal(attendantReopenError?.code, "42501");
   const { error: reopenError } = await administratorClient.rpc(
     "reabrir_ordem_servico",
-    { p_ordem_id: firstOrder, p_justificativa: "Correção controlada.", p_versao: 13 },
+    { p_ordem_id: firstOrder, p_justificativa: "Correção controlada.", p_versao: 12 },
   );
   assert.ifError(reopenError);
   const { error: attendantRollbackError } = await attendantClient.rpc(
@@ -364,13 +367,13 @@ try {
       p_ordem_id: firstOrder,
       p_destino: "em_execucao",
       p_justificativa: "Tentativa sem permissão.",
-      p_versao: 14,
+      p_versao: 13,
     },
   );
   assert.equal(attendantRollbackError?.code, "42501");
   const { error: staleVersionError } = await administratorClient.rpc(
     "retroceder_ordem_servico",
-    { p_ordem_id: firstOrder, p_destino: "em_execucao", p_justificativa: "Teste", p_versao: 13 },
+    { p_ordem_id: firstOrder, p_destino: "em_execucao", p_justificativa: "Teste", p_versao: 12 },
   );
   assert.equal(staleVersionError?.code, "P0001");
   assert.match(staleVersionError?.message ?? "", /CONFLITO_VERSAO/);
@@ -378,7 +381,7 @@ try {
     p_ordem_id: firstOrder,
     p_destino: "em_execucao",
     p_justificativa: "Ajuste autorizado.",
-    p_versao: 14,
+    p_versao: 13,
   })).error);
   console.log("[ordens:rls] validando cancelamento, reabertura e histórico");
 

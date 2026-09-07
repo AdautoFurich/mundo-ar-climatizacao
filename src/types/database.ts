@@ -734,7 +734,7 @@ export type Database = {
           p_descricao: string
           p_ordem_id: string
           p_quantidade: number
-          p_servico_id: string
+          p_servico_id: string | null
           p_tipo: string
           p_valor_unitario: number
           p_versao: number
@@ -747,7 +747,7 @@ export type Database = {
           p_item_id: string
           p_ordem_id: string
           p_quantidade: number
-          p_servico_id: string
+          p_servico_id: string | null
           p_tipo: string
           p_valor_unitario: number
           p_versao: number
@@ -811,6 +811,17 @@ export type Database = {
           p_decisao: string
           p_item_id: string
           p_observacoes: string
+          p_ordem_id: string
+          p_respondido_em: string
+          p_versao: number
+        }
+        Returns: number
+      }
+      registrar_aprovacoes_ordem: {
+        Args: {
+          p_canal: string
+          p_decisoes: Json
+          p_observacoes: string | null
           p_ordem_id: string
           p_respondido_em: string
           p_versao: number

@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { INITIAL_ORDER_ACTION_STATE } from "../types";
-import { startDiagnosisAction } from "./workflow";
+import { sendQuoteForApprovalAction, startDiagnosisAction } from "./workflow";
 
 const { revalidatePath, redirect, requirePermission, rpc } = vi.hoisted(() => ({
   revalidatePath: vi.fn(),
@@ -59,6 +59,34 @@ describe("início do diagnóstico", () => {
     ).rejects.toThrow("NEXT_REDIRECT");
     expect(redirect).toHaveBeenCalledWith(
       "/ordens-servico/f74f53fe-83fd-4e44-9a35-9253204f711a?conflito=1",
+    );
+  });
+});
+
+describe("envio do orçamento para aprovação", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+    requirePermission.mockResolvedValue({ id: "usuario" });
+  });
+
+  it("avança para aguardando aprovação pela função transacional", async () => {
+    rpc.mockResolvedValue({ data: 5, error: null });
+    await expect(
+      sendQuoteForApprovalAction(
+        "f74f53fe-83fd-4e44-9a35-9253204f711a",
+        4,
+        INITIAL_ORDER_ACTION_STATE,
+        new FormData(),
+      ),
+    ).rejects.toThrow("NEXT_REDIRECT");
+
+    expect(rpc).toHaveBeenCalledWith("avancar_ordem_servico", {
+      p_destino: "aguardando_aprovacao",
+      p_ordem_id: "f74f53fe-83fd-4e44-9a35-9253204f711a",
+      p_versao: 4,
+    });
+    expect(redirect).toHaveBeenCalledWith(
+      "/ordens-servico/f74f53fe-83fd-4e44-9a35-9253204f711a?situacao=aguardando_aprovacao",
     );
   });
 });

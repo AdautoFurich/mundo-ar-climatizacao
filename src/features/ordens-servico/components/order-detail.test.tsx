@@ -135,4 +135,30 @@ describe("detalhes da ordem de serviço", () => {
     rerender(<OrderTimeline events={[]} />);
     expect(screen.getByText("Nenhum evento registrado.")).toBeInTheDocument();
   });
+
+  it("mantém o histórico auditável das decisões do cliente", () => {
+    render(
+      <OrderDetail
+        order={{
+          ...order,
+          approvals: [
+            {
+              id: "869999f7-c1d7-4ca2-9e55-2e1a6ddf8f95",
+              itemId: order.items[0].id,
+              decision: "aprovado",
+              channel: "whatsapp",
+              respondedAt: "2026-09-05T16:00:00.000Z",
+              notes: "Cliente confirmou por mensagem.",
+              authorId: order.responsibleId,
+              authorName: "Adauto Furich",
+              createdAt: "2026-09-05T16:01:00.000Z",
+            },
+          ],
+        }}
+      />,
+    );
+    expect(screen.getByRole("heading", { name: "Histórico de aprovações" })).toBeInTheDocument();
+    expect(screen.getByText(/WhatsApp · resposta em/)).toBeInTheDocument();
+    expect(screen.getByText("Cliente confirmou por mensagem.")).toBeInTheDocument();
+  });
 });
