@@ -33,15 +33,17 @@ function Section({
   children,
   description,
   icon: Icon,
+  id,
   title,
 }: {
   children: React.ReactNode;
   description?: string;
   icon: typeof CarFront;
+  id?: string;
   title: string;
 }) {
   return (
-    <section className="overflow-hidden rounded-xl border bg-white shadow-[0_2px_8px_rgba(16,45,63,0.04)]">
+    <section className="scroll-mt-3 overflow-hidden rounded-xl border bg-white shadow-[0_2px_8px_rgba(16,45,63,0.04)]" id={id}>
       <div className="flex items-start gap-3 border-b px-4 py-3.5 sm:px-5">
         <span aria-hidden="true" className="grid size-9 shrink-0 place-items-center rounded-lg bg-teal-50 text-[var(--action)]">
           <Icon className="size-4.5" />
@@ -118,12 +120,16 @@ function BudgetItem({ item }: { item: ServiceOrderItem }) {
 
 export function OrderDetail({
   approvalPanel,
+  deliveryForm,
   diagnosisForm,
+  executionPanel,
   order,
   quoteEditor,
 }: {
   approvalPanel?: React.ReactNode;
+  deliveryForm?: React.ReactNode;
   diagnosisForm?: React.ReactNode;
+  executionPanel?: React.ReactNode;
   order: ServiceOrderDetails;
   quoteEditor?: React.ReactNode;
 }) {
@@ -226,8 +232,8 @@ export function OrderDetail({
         )}
       </Section>
 
-      <Section description="Acompanhamento dos itens autorizados" icon={Wrench} title="Execução">
-        {approvedItems.length === 0 ? (
+      <Section description="Acompanhamento dos itens autorizados" icon={Wrench} id="execucao" title="Execução">
+        {executionPanel ?? (approvedItems.length === 0 ? (
           <p className="rounded-lg border border-dashed bg-[var(--surface-subtle)] px-4 py-6 text-center text-sm font-semibold text-[var(--brand)]">Nenhum item autorizado para execução.</p>
         ) : pendingExecution > 0 ? (
           <div className="flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-amber-950">
@@ -242,11 +248,11 @@ export function OrderDetail({
             <PackageCheck aria-hidden="true" className="size-5 shrink-0" />
             <p className="text-sm font-semibold">Todos os itens autorizados foram executados.</p>
           </div>
-        )}
+        ))}
       </Section>
 
-      <Section description="Encerramento e forma de pagamento" icon={KeyRound} title="Entrega">
-        {!order.delivery ? (
+      <Section description="Encerramento e forma de pagamento" icon={KeyRound} id="entrega" title="Entrega">
+        {deliveryForm ?? (!order.delivery ? (
           <p className="rounded-lg border border-dashed bg-[var(--surface-subtle)] px-4 py-6 text-center text-sm font-semibold text-[var(--brand)]">Entrega ainda não registrada.</p>
         ) : (
           <dl className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
@@ -255,7 +261,7 @@ export function OrderDetail({
             <DetailItem label="Registrado por" value={order.delivery.authorName} />
             <div className="sm:col-span-2 xl:col-span-3"><DetailItem label="Observações" value={order.delivery.notes} /></div>
           </dl>
-        )}
+        ))}
       </Section>
 
       <section className="rounded-xl border bg-white px-4 py-3 text-xs text-[var(--ink-muted)]">

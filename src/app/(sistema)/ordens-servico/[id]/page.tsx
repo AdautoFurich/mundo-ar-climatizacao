@@ -6,6 +6,8 @@ import { AppShell } from "@/components/layout/app-shell";
 import { ApprovalPanel } from "@/features/ordens-servico/components/approval-panel";
 import { OrderDetail } from "@/features/ordens-servico/components/order-detail";
 import { DiagnosisForm } from "@/features/ordens-servico/components/diagnosis-form";
+import { DeliveryForm } from "@/features/ordens-servico/components/delivery-form";
+import { ExecutionPanel } from "@/features/ordens-servico/components/execution-panel";
 import { OrderSummary } from "@/features/ordens-servico/components/order-summary";
 import { OrderStatusAction } from "@/features/ordens-servico/components/status-action";
 import { OrderTimeline } from "@/features/ordens-servico/components/timeline";
@@ -60,6 +62,16 @@ export default async function ServiceOrderDetailsPage({
               Orçamento enviado. Registre a resposta do cliente para cada item.
             </p>
           )}
+          {firstValue(messages.situacao) === "em_execucao" && (
+            <p className="mb-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-[var(--success)]" role="status">
+              Execução iniciada. Atualize os itens autorizados conforme forem concluídos.
+            </p>
+          )}
+          {firstValue(messages.situacao) === "pronta_retirada" && (
+            <p className="mb-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-[var(--success)]" role="status">
+              Veículo liberado para retirada.
+            </p>
+          )}
           {firstValue(messages.diagnostico) === "salvo" && (
             <p className="mb-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-[var(--success)]" role="status">
               Diagnóstico técnico salvo e histórico atualizado.
@@ -76,6 +88,18 @@ export default async function ServiceOrderDetailsPage({
           {firstValue(messages.aprovacao) === "registrada" && (
             <p className="mb-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-[var(--success)]" role="status">
               Resposta do cliente registrada e totais atualizados.
+            </p>
+          )}
+          {firstValue(messages.execucao) && (
+            <p className="mb-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-[var(--success)]" role="status">
+              {firstValue(messages.execucao) === "item-concluido"
+                ? "Item marcado como concluído."
+                : "Conclusão do item desfeita."}
+            </p>
+          )}
+          {firstValue(messages.entrega) === "registrada" && (
+            <p className="mb-3 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-sm font-semibold text-[var(--success)]" role="status">
+              Pagamento e entrega registrados. Atendimento finalizado com sucesso.
             </p>
           )}
           {firstValue(messages.conflito) && (
@@ -121,6 +145,26 @@ export default async function ServiceOrderDetailsPage({
                   <DiagnosisForm
                     expectedCompletionAt={order.expectedCompletionAt}
                     orderId={order.id}
+                    version={order.version}
+                  />
+                ) : undefined
+              }
+              deliveryForm={
+                order.status === "pronta_retirada" ? (
+                  <DeliveryForm
+                    authorizedTotal={order.authorizedTotal}
+                    deliveredAtDefault={new Date().toISOString()}
+                    orderId={order.id}
+                    version={order.version}
+                  />
+                ) : undefined
+              }
+              executionPanel={
+                order.status === "aprovada" || order.status === "em_execucao" ? (
+                  <ExecutionPanel
+                    items={order.items}
+                    orderId={order.id}
+                    status={order.status}
                     version={order.version}
                   />
                 ) : undefined

@@ -328,4 +328,5 @@ export type DiagnosisData = z.output<typeof diagnosisSchema>;
 export type DiagnosisInput = z.input<typeof diagnosisSchema>;
 export type ApprovalData = z.output<typeof approvalSchema>;
 export type ApprovalBatchData = z.output<typeof approvalBatchSchema>;
+export type DeliveryInput = z.input<typeof deliverySchema>;
 export type DeliveryData = z.output<typeof deliverySchema>;

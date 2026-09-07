@@ -98,3 +98,70 @@ export async function sendQuoteForApprovalAction(
   revalidateOrder(validId.data);
   redirect(`/ordens-servico/${validId.data}?situacao=aguardando_aprovacao`);
 }
+
+async function advanceExecutionStage(
+  orderId: string,
+  expectedVersion: number,
+  destination: "em_execucao" | "pronta_retirada",
+): Promise<OrderActionState> {
+  await requirePermission("ordens:executar");
+  const validId = orderIdSchema.safeParse(orderId);
+  if (
+    !validId.success ||
+    !Number.isSafeInteger(expectedVersion) ||
+    expectedVersion <= 0
+  ) {
+    return { status: "error", message: "Ordem de serviço inválida." };
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.rpc("avancar_ordem_servico", {
+    p_destino: destination,
+    p_ordem_id: validId.data,
+    p_versao: expectedVersion,
+  });
+
+  if (isConflict(error)) {
+    redirect(`/ordens-servico/${validId.data}?conflito=1#execucao`);
+  }
+  if (error || data === null) {
+    const invalidStateMessage =
+      destination === "em_execucao"
+        ? "A ordem precisa estar aprovada antes de iniciar a execução."
+        : "Conclua todos os itens autorizados antes de liberar a retirada.";
+    return {
+      status: "error",
+      message:
+        error?.code === "23514" || error?.code === "P0002"
+          ? invalidStateMessage
+          : "Não foi possível atualizar a etapa da ordem agora.",
+    };
+  }
+
+  revalidateOrder(validId.data);
+  redirect(
+    `/ordens-servico/${validId.data}?situacao=${destination}#execucao`,
+  );
+}
+
+export async function startExecutionAction(
+  orderId: string,
+  expectedVersion: number,
+  previousState: OrderActionState,
+  formData: FormData,
+): Promise<OrderActionState> {
+  void previousState;
+  void formData;
+  return advanceExecutionStage(orderId, expectedVersion, "em_execucao");
+}
+
+export async function markReadyForPickupAction(
+  orderId: string,
+  expectedVersion: number,
+  previousState: OrderActionState,
+  formData: FormData,
+): Promise<OrderActionState> {
+  void previousState;
+  void formData;
+  return advanceExecutionStage(orderId, expectedVersion, "pronta_retirada");
+}

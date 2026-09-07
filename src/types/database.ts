@@ -786,7 +786,7 @@ export type Database = {
         Args: {
           p_entregue_em: string
           p_forma: string
-          p_observacoes: string
+          p_observacoes: string | null
           p_ordem_id: string
           p_versao: number
         }
