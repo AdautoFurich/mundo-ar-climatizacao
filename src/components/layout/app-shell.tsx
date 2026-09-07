@@ -1,6 +1,5 @@
 import {
   BarChart3,
-  Bell,
   CalendarDays,
   CarFront,
   ChevronDown,
@@ -10,7 +9,6 @@ import {
   Menu,
   Search,
   Settings,
-  SlidersHorizontal,
   Stethoscope,
   Users,
   Wrench,
@@ -195,54 +193,21 @@ function SidebarContent({
 function DashboardTools({ user }: { user: CurrentUser }) {
   return (
     <div className="flex min-w-0 flex-1 items-center justify-end gap-2.5">
-      <label className="relative hidden min-w-0 max-w-[21rem] flex-1 xl:block">
-        <span className="sr-only">Buscar no sistema</span>
+      <form action="/ordens-servico" className="relative hidden min-w-0 max-w-[21rem] flex-1 xl:block" method="get">
+        <label className="sr-only" htmlFor="dashboard-order-search">Buscar ordens</label>
         <Search
           aria-hidden="true"
           className="pointer-events-none absolute left-3.5 top-1/2 size-4 -translate-y-1/2 text-[var(--ink-faint)]"
         />
         <input
-          className="h-10 w-full rounded-lg border bg-white pl-10 pr-14 text-sm outline-none placeholder:text-slate-500 focus:border-[var(--focus)] focus:ring-2 focus:ring-[var(--focus)]/20"
+          className="h-10 w-full rounded-lg border bg-white pl-10 pr-20 text-sm outline-none placeholder:text-slate-500 focus:border-[var(--focus)] focus:ring-2 focus:ring-[var(--focus)]/20"
+          id="dashboard-order-search"
+          name="busca"
           placeholder="Buscar por ordem, cliente, veículo..."
-          readOnly
           type="search"
         />
-        <kbd className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 rounded border bg-[var(--surface-subtle)] px-1.5 py-0.5 text-2xs text-[var(--ink-faint)]">
-          Ctrl + K
-        </kbd>
-      </label>
-
-      <button
-        aria-disabled="true"
-        className="hidden h-10 items-center gap-2 rounded-lg border bg-white px-3 text-sm font-semibold text-[var(--brand)] lg:flex"
-        title="Filtro demonstrativo"
-        type="button"
-      >
-        <CalendarDays aria-hidden="true" className="size-4" />
-        Hoje
-        <ChevronDown aria-hidden="true" className="size-3.5" />
-      </button>
-      <button
-        aria-disabled="true"
-        className="hidden h-10 items-center gap-2 rounded-lg border bg-white px-3 text-sm font-semibold text-[var(--brand)] 2xl:flex"
-        title="Filtro demonstrativo"
-        type="button"
-      >
-        <SlidersHorizontal aria-hidden="true" className="size-4" />
-        Todos os status
-        <ChevronDown aria-hidden="true" className="size-3.5" />
-      </button>
-
-      <button
-        aria-label="Notificações: 3 não lidas"
-        className="relative grid size-10 shrink-0 place-items-center rounded-lg text-[var(--brand)] hover:bg-[var(--surface-subtle)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
-        type="button"
-      >
-        <Bell aria-hidden="true" className="size-[1.15rem]" />
-        <span className="absolute right-0.5 top-0.5 grid size-4 place-items-center rounded-full bg-[var(--action)] text-2xs font-bold text-white">
-          3
-        </span>
-      </button>
+        <button className="absolute right-1.5 top-1/2 min-h-8 -translate-y-1/2 rounded-md bg-[var(--action)] px-3 text-xs font-semibold text-white hover:bg-[var(--action-strong)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]" type="submit">Buscar</button>
+      </form>
 
       <div className="hidden h-10 items-center gap-2.5 border-l pl-3 sm:flex">
         <div
