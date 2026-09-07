@@ -52,6 +52,7 @@ describe("listagem de ordens de serviço", () => {
     expect(screen.getAllByText("Em diagnóstico")).toHaveLength(2);
     expect(screen.getAllByText(/487,50/)).toHaveLength(2);
     expect(screen.getAllByText("Atrasada")).toHaveLength(2);
+    expect(screen.getAllByRole("link", { name: "OS #0018" })).toHaveLength(2);
   });
 
   it("diferencia ausência de ordens de um resultado filtrado vazio", () => {

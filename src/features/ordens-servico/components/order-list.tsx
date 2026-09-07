@@ -76,9 +76,12 @@ function OrderCard({ order }: { order: ServiceOrderSummary }) {
           <ClipboardList className="size-4.5" />
         </span>
         <div className="min-w-0 flex-1">
-          <p className="font-display text-lg font-bold text-[var(--brand)]">
+          <Link
+            className="font-display text-lg font-bold text-[var(--brand)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+            href={`/ordens-servico/${order.id}`}
+          >
             {formatOrderNumber(order.number)}
-          </p>
+          </Link>
           <p className="mt-0.5 truncate text-sm font-semibold text-[var(--ink)]">
             {order.vehicleLabel}
           </p>
@@ -201,7 +204,12 @@ export function OrderList({
               {result.orders.map((order) => (
                 <tr className="border-b last:border-0 hover:bg-[var(--surface-subtle)]" key={order.id}>
                   <td className="px-4 py-3 font-display font-bold text-[var(--brand)]">
-                    {formatOrderNumber(order.number)}
+                    <Link
+                      className="hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)]"
+                      href={`/ordens-servico/${order.id}`}
+                    >
+                      {formatOrderNumber(order.number)}
+                    </Link>
                   </td>
                   <td className="px-3 py-3 text-sm">
                     <div className="flex items-center gap-2">

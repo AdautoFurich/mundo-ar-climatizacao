@@ -1,11 +1,16 @@
 import { describe, expect, it } from "vitest";
 
 import {
+  formatApprovalStatus,
+  formatFuelLevel,
   formatMileage,
   formatOrderDate,
+  formatOrderDateTimeInput,
   formatOrderMoney,
   formatOrderNumber,
+  formatOrderQuantity,
   formatOrderStatus,
+  formatPaymentMethod,
 } from "./formatters";
 
 describe("apresentação da ordem", () => {
@@ -21,5 +26,16 @@ describe("apresentação da ordem", () => {
     expect(formatOrderDate("2026-09-06T16:30:00.000Z")).toBe(
       "06/09/2026, 13:30",
     );
+    expect(formatOrderDateTimeInput("2026-09-07T21:00:00.000Z")).toBe(
+      "2026-09-07T18:00",
+    );
+    expect(formatOrderDateTimeInput(null)).toBe("");
+  });
+
+  it("formata dados operacionais complementares", () => {
+    expect(formatFuelLevel("metade")).toBe("1/2");
+    expect(formatApprovalStatus("aprovado")).toBe("Aprovado");
+    expect(formatPaymentMethod("cartao_credito")).toBe("Cartão de crédito");
+    expect(formatOrderQuantity(1.25)).toBe("1,25");
   });
 });

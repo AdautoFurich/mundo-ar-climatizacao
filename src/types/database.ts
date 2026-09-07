@@ -833,9 +833,9 @@ export type Database = {
       salvar_diagnostico_ordem: {
         Args: {
           p_descricao: string
-          p_observacoes: string
+          p_observacoes: string | null
           p_ordem_id: string
-          p_previsao_em: string
+          p_previsao_em: string | null
           p_versao: number
         }
         Returns: number

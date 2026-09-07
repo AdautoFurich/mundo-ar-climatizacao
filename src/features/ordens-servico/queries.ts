@@ -54,6 +54,10 @@ function userName(names: ReadonlyMap<string, string>, id: string) {
   return names.get(id) ?? "Usuário não encontrado";
 }
 
+function moneyToCents(value: number) {
+  return Math.round(Number(value) * 100);
+}
+
 function toSummary(
   row: Pick<
     OrderRow,
@@ -89,7 +93,7 @@ function toSummary(
     responsibleName,
     entryAt: row.entrada_em,
     expectedCompletionAt: row.previsao_conclusao_em,
-    authorizedTotal: Math.round(Number(row.total_autorizado) * 100),
+    authorizedTotal: moneyToCents(row.total_autorizado),
     updatedAt: row.atualizado_em,
     overdue: isOrderOverdue(status, row.previsao_conclusao_em, now),
   };
@@ -273,8 +277,8 @@ export async function getServiceOrderById(
     serviceId: row.servico_id,
     description: row.descricao,
     quantity: row.quantidade,
-    unitPrice: row.valor_unitario,
-    subtotal: row.subtotal ?? 0,
+    unitPrice: moneyToCents(row.valor_unitario),
+    subtotal: moneyToCents(row.subtotal ?? 0),
     approvalStatus: row.situacao_aprovacao as ApprovalStatus,
     executedAt: row.executado_em,
     executedById: row.executado_por,
@@ -338,13 +342,13 @@ export async function getServiceOrderById(
     accessories: order.acessorios,
     visibleDamage: order.avarias_visiveis,
     intakeNotes: order.observacoes_entrada,
-    servicesSubtotal: order.subtotal_servicos,
-    materialsSubtotal: order.subtotal_materiais,
-    quotedSubtotal: order.subtotal_orcado,
-    approvedSubtotal: order.subtotal_autorizado,
-    discount: order.desconto,
-    quotedTotal: order.total_orcado,
-    finalTotal: order.total_final,
+    servicesSubtotal: moneyToCents(order.subtotal_servicos),
+    materialsSubtotal: moneyToCents(order.subtotal_materiais),
+    quotedSubtotal: moneyToCents(order.subtotal_orcado),
+    approvedSubtotal: moneyToCents(order.subtotal_autorizado),
+    discount: moneyToCents(order.desconto),
+    quotedTotal: moneyToCents(order.total_orcado),
+    finalTotal: moneyToCents(order.total_final),
     version: order.versao,
     createdById: order.criado_por,
     createdByName: userName(names, order.criado_por),

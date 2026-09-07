@@ -81,7 +81,7 @@ describe("ação de abertura da ordem", () => {
     });
     expect(revalidatePath).toHaveBeenCalledWith("/ordens-servico");
     expect(redirect).toHaveBeenCalledWith(
-      "/ordens-servico?criada=f74f53fe-83fd-4e44-9a35-9253204f711a",
+      "/ordens-servico/f74f53fe-83fd-4e44-9a35-9253204f711a?criada=1",
     );
   });
 });

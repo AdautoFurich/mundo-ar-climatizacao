@@ -205,7 +205,12 @@ export const diagnosisSchema = z.object({
   description: requiredText("Informe o diagnóstico técnico.", 5000),
   notes: optionalText(2000),
   expectedCompletionAt: optionalDateTimeSchema(),
-  expectedVersion: z.coerce.number().int().positive(),
+  expectedVersion: z
+    .string()
+    .trim()
+    .regex(/^\d+$/, "Versão da ordem inválida.")
+    .transform(Number)
+    .pipe(z.number().int().positive()),
 });
 
 export const orderItemSchema = z
@@ -276,5 +281,6 @@ export type IntakeInput = z.input<typeof intakeSchema>;
 export type IntakeData = z.output<typeof intakeSchema>;
 export type OrderItemData = z.output<typeof orderItemSchema>;
 export type DiagnosisData = z.output<typeof diagnosisSchema>;
+export type DiagnosisInput = z.input<typeof diagnosisSchema>;
 export type ApprovalData = z.output<typeof approvalSchema>;
 export type DeliveryData = z.output<typeof deliverySchema>;

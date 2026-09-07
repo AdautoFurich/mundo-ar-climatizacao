@@ -76,7 +76,8 @@ export async function createServiceOrderAction(
 
   revalidatePath("/");
   revalidatePath("/ordens-servico");
+  revalidatePath(`/ordens-servico/${orderId}`);
   revalidatePath(`/clientes/${data.clientId}`);
   revalidatePath(`/veiculos/${data.vehicleId}`);
-  redirect(`/ordens-servico?criada=${orderId}`);
+  redirect(`/ordens-servico/${orderId}?criada=1`);
 }
