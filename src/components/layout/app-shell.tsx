@@ -26,7 +26,7 @@ import { cn } from "@/lib/utils";
 
 const operationNavigation = [
   { label: "Visão geral", icon: Gauge, href: "/" },
-  { label: "Ordens de serviço", icon: ClipboardList },
+  { label: "Ordens de serviço", icon: ClipboardList, href: "/ordens-servico" },
   { label: "Diagnósticos", icon: Stethoscope },
   { label: "Clientes", icon: Users, href: "/clientes" },
   { label: "Veículos", icon: CarFront, href: "/veiculos" },

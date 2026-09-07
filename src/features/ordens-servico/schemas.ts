@@ -35,8 +35,8 @@ const MAXIMUM_QUANTITY_THOUSANDTHS = 999_999_999;
 const BRAZILIAN_CURRENCY_PATTERN =
   /^(?:\d{1,3}(?:\.\d{3})+|\d+)(?:,\d{1,2})?$/;
 const QUANTITY_PATTERN = /^\d+(?:,\d{1,3})?$/;
-const ISO_DATE_TIME_WITH_ZONE =
-  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})$/;
+const ISO_DATE_TIME =
+  /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(?::\d{2}(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})?$/;
 
 export function normalizeOrderText(value: string) {
   return value.trim().replace(/\s+/g, " ");
@@ -63,10 +63,11 @@ function optionalText(maximum: number) {
 }
 
 function parseIsoDateTime(value: string) {
-  if (!ISO_DATE_TIME_WITH_ZONE.test(value)) {
+  if (!ISO_DATE_TIME.test(value)) {
     throw new Error("Informe uma data e hora válidas.");
   }
-  const date = new Date(value);
+  const hasTimeZone = /(?:Z|[+-]\d{2}:\d{2})$/.test(value);
+  const date = new Date(hasTimeZone ? value : `${value}-03:00`);
   const [calendarDate] = value.split("T");
   const [year, month, day] = calendarDate.split("-").map(Number);
   const daysInMonth = new Date(Date.UTC(year, month, 0)).getUTCDate();
@@ -271,6 +272,7 @@ export const justifiedTransitionSchema = z.object({
   expectedVersion: z.coerce.number().int().positive(),
 });
 
+export type IntakeInput = z.input<typeof intakeSchema>;
 export type IntakeData = z.output<typeof intakeSchema>;
 export type OrderItemData = z.output<typeof orderItemSchema>;
 export type DiagnosisData = z.output<typeof diagnosisSchema>;

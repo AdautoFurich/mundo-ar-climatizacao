@@ -49,6 +49,19 @@ describe("validação da entrada da ordem", () => {
     });
   });
 
+  it("interpreta o horário local do formulário no fuso da oficina", () => {
+    expect(
+      intakeSchema.parse({
+        ...validIntake,
+        entryAt: "2026-09-06T13:00",
+        expectedCompletionAt: "2026-09-07T18:00",
+      }),
+    ).toMatchObject({
+      entryAt: "2026-09-06T16:00:00.000Z",
+      expectedCompletionAt: "2026-09-07T21:00:00.000Z",
+    });
+  });
+
   it("aceita somente identificadores, combustível e datas válidos", () => {
     expect(FUEL_LEVEL_VALUES).toHaveLength(5);
     expect(

@@ -89,7 +89,7 @@ function toSummary(
     responsibleName,
     entryAt: row.entrada_em,
     expectedCompletionAt: row.previsao_conclusao_em,
-    authorizedTotal: row.total_autorizado,
+    authorizedTotal: Math.round(Number(row.total_autorizado) * 100),
     updatedAt: row.atualizado_em,
     overdue: isOrderOverdue(status, row.previsao_conclusao_em, now),
   };
@@ -391,7 +391,7 @@ export async function listActiveOrderVehicles(
     id: row.id,
     clientId: row.cliente_id,
     plate: row.placa,
-    label: `${row.marca} ${row.modelo} — ${row.placa} (${row.ano_modelo})`,
+    label: `${row.marca} ${row.modelo} (${row.ano_modelo})`,
   }));
 }
 

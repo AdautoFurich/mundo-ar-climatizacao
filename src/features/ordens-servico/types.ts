@@ -1,4 +1,5 @@
 import type { ServiceCategory } from "@/features/servicos/schemas";
+import type { IntakeInput } from "./schemas";
 
 export const ORDER_STATUS_VALUES = [
   "aberta",
@@ -90,6 +91,18 @@ export type ServiceOrderListResult = {
   pageSize: number;
   totalPages: number;
 };
+
+export type OrderActionState = {
+  status: "idle" | "error";
+  message?: string;
+  fieldErrors?: Record<string, string[]>;
+};
+
+export const INITIAL_ORDER_ACTION_STATE: OrderActionState = {
+  status: "idle",
+};
+
+export type IntakeFormValues = IntakeInput;
 
 export type OrderDiagnosis = {
   id: string;

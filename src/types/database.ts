@@ -768,13 +768,13 @@ export type Database = {
       }
       criar_ordem_servico: {
         Args: {
-          p_acessorios: string
-          p_avarias: string
+          p_acessorios: string | null
+          p_avarias: string | null
           p_cliente_id: string
           p_entrada_em: string
           p_nivel_combustivel: string
-          p_observacoes: string
-          p_previsao_em: string
+          p_observacoes: string | null
+          p_previsao_em: string | null
           p_quilometragem: number
           p_relato: string
           p_responsavel_id: string
