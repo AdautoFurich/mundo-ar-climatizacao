@@ -39,7 +39,7 @@ describe("schemas de autenticação", () => {
     ).toBe(true);
   });
 
-  it("aceita somente os três perfis previstos no convite", () => {
+  it("aceita somente os dois perfis previstos no convite", () => {
     expect(
       inviteUserSchema.safeParse({
         name: "Maria Souza",
@@ -47,6 +47,14 @@ describe("schemas de autenticação", () => {
         role: "atendente",
       }).success,
     ).toBe(true);
+
+    expect(
+      inviteUserSchema.safeParse({
+        name: "Maria Souza",
+        email: "maria@mundoar.com.br",
+        role: "tecnico",
+      }).success,
+    ).toBe(false);
 
     expect(
       inviteUserSchema.safeParse({

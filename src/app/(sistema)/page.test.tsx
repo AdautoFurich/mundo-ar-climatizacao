@@ -17,6 +17,23 @@ vi.mock("@/lib/auth/guards", () => ({
   }),
 }));
 
+vi.mock("@/features/dashboard/queries", () => ({
+  getDashboardData: vi.fn().mockResolvedValue({
+    statusCounts: {
+      diagnosis: 1,
+      awaitingApproval: 2,
+      execution: 1,
+      readyForPickup: 0,
+      overdue: 0,
+    },
+    recentOrders: [],
+    daily: { opened: 1, delivered: 0, revenue: 0, averageTicket: 0 },
+    attentionTotal: 0,
+    attentionItems: [],
+    nextActions: [],
+  }),
+}));
+
 describe("Dashboard inicial", () => {
   it("apresenta o resumo operacional e a sessão do usuário", async () => {
     render(await Home());
@@ -25,15 +42,15 @@ describe("Dashboard inicial", () => {
       screen.getByRole("heading", { name: "Visão geral" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Nova ordem de serviço" }),
+      screen.getByRole("link", { name: "Nova ordem de serviço" }),
     ).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: "Novo cliente" }),
+      screen.getByRole("link", { name: "Novo cliente" }),
     ).toBeInTheDocument();
-    expect(screen.getAllByText("Aguardando aprovação")).toHaveLength(2);
+    expect(screen.getByText("Aguardando aprovação")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Ordens recentes" })).toBeInTheDocument();
     expect(screen.getByText("Próximas ações")).toBeInTheDocument();
-    expect(screen.getByText("Ticket médio")).toBeInTheDocument();
+    expect(screen.getByText("Ticket médio de hoje")).toBeInTheDocument();
     expect(screen.getByText("Adauto Furich")).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: "Sair" })).toHaveLength(2);
   });

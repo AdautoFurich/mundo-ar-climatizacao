@@ -54,7 +54,6 @@ export function InviteUserForm() {
         <select {...form.register("role")} className={fieldClassName} id="invite-role">
           <option value="administrador">Administrador</option>
           <option value="atendente">Atendente</option>
-          <option value="tecnico">Técnico</option>
         </select>
       </div>
       <Button disabled={pending} type="submit">

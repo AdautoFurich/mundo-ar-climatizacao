@@ -11,14 +11,17 @@ Interface operacional para uma oficina de climatização automotiva. Deve comuni
 - Azul compressor: `#102D3F` — marca e navegação.
 - Verde operacional: `#0F766E` — ação principal e progresso.
 - Verde-claro técnico: `#66D2C9` — foco da marca e estado ativo.
-- Âmbar de pendência: `#B86612` — itens que exigem atenção.
+- Âmbar de pendência: `#A85C0E` — itens que exigem atenção. Escurecido de `#B86612` para atingir 4,5:1 sobre branco.
 - Aço claro: `#EEF2F4` — fundo da aplicação.
 - Tinta: `#172731` — texto principal.
 
 ## Tipografia
 
-- Display: família condensada disponível no sistema, usada com moderação em marca, títulos e números.
-- Corpo: Source Sans 3 quando disponível, com Segoe UI e system-ui como alternativas.
+- Display: Archivo Narrow, carregada via `next/font/google` e exposta em `--font-display`.
+- Corpo: Source Sans 3, carregada via `next/font/google` e exposta em `--font-body`.
+- Ambas são self-hosted pelo Next. Nenhuma família depende do que o sistema operacional tem instalado.
+- Escala de seis degraus: 11 / 12 / 14 / 16 / 20 / 30 px. Nada de conteúdo abaixo de 11 px.
+- `text-2xs` (11 px) é o menor degrau, reservado a rótulos em versalete e selos.
 - Dados importantes usam peso forte e alinhamento estável.
 
 ## Layout

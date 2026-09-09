@@ -8,7 +8,7 @@ import type { CurrentUser, UserRole } from "@/features/auth/types";
 import { isSupabaseConfigured } from "@/lib/env";
 import { createClient } from "@/lib/supabase/server";
 
-const validRoles: UserRole[] = ["administrador", "atendente", "tecnico"];
+const validRoles: UserRole[] = ["administrador", "atendente"];
 
 export const getCurrentUser = cache(async (): Promise<CurrentUser | null> => {
   if (!isSupabaseConfigured()) return null;

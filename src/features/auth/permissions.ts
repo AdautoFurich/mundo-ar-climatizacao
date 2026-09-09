@@ -12,6 +12,7 @@ export const PERMISSIONS = [
   "ordens:consultar",
   "ordens:atender",
   "ordens:executar",
+  "ordens:administrar",
   "relatorios:consultar",
 ] as const;
 
@@ -28,15 +29,8 @@ const rolePermissions = {
     "servicos:consultar",
     "ordens:consultar",
     "ordens:atender",
-    "relatorios:consultar",
-  ],
-  tecnico: [
-    "sistema:acessar",
-    "clientes:consultar",
-    "veiculos:consultar",
-    "servicos:consultar",
-    "ordens:consultar",
     "ordens:executar",
+    "relatorios:consultar",
   ],
 } as const satisfies Record<UserRole, readonly Permission[]>;
 

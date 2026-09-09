@@ -12,6 +12,10 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:rls": "node --env-file=.env.local scripts/validar-rls.mjs",
+    "test:clients:rls": "node --env-file=.env.local scripts/validar-clientes-rls.mjs",
+    "test:vehicles:rls": "node --env-file=.env.local scripts/validar-veiculos-rls.mjs",
+    "test:services:rls": "node --env-file=.env.local scripts/validar-servicos-rls.mjs",
+    "test:orders:rls": "node --env-file=.env.local scripts/validar-ordens-servico-rls.mjs",
     "admin:create": "node --env-file=.env.local scripts/criar-primeiro-administrador.mjs"
   },
   "dependencies": {
@@ -22,6 +26,7 @@
     "clsx": "latest",
     "lucide-react": "latest",
     "next": "latest",
+    "pdf-lib": "^1.17.1",
     "react": "latest",
     "react-dom": "latest",
     "react-hook-form": "latest",

@@ -31,7 +31,7 @@ import {
 import { INITIAL_ACTION_STATE } from "@/features/auth/types";
 
 const fieldClassName =
-  "min-h-14 w-full rounded-lg border border-[var(--border)] bg-white px-3.5 text-base text-[var(--ink)] shadow-[0_1px_1px_rgba(15,35,47,0.03)] outline-none transition placeholder:text-slate-400 focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--focus)]/25";
+  "min-h-14 w-full rounded-lg border border-[var(--border)] bg-white px-3.5 text-base text-[var(--ink)] shadow-[0_1px_1px_rgba(15,35,47,0.03)] outline-none transition placeholder:text-slate-500 focus:border-[var(--action)] focus:ring-2 focus:ring-[var(--focus)]/25";
 
 function FieldError({ id, messages }: { id: string; messages?: string[] }) {
   if (!messages?.length) return null;

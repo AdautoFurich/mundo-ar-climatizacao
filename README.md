@@ -8,7 +8,15 @@ Sistema web de apoio à operação da oficina Mundo Ar Climatização, desenvolv
 - Ordem de serviço da entrada do veículo até a entrega.
 - Relatórios por período e por serviços mais realizados.
 - Histórico de manutenção por veículo.
-- Autenticação com perfis de administrador, atendente e técnico.
+- Autenticação com perfis de administrador e atendente.
+
+## Módulos implementados
+
+- Autenticação e gestão de usuários.
+- Dashboard operacional responsivo.
+- Cadastro de clientes pessoas físicas.
+- Cadastro de veículos, com transferência auditada de proprietário.
+- Catálogo de serviços, com categorias e valores-base opcionais.
 
 ## Tecnologias
 
@@ -64,9 +72,12 @@ npm run test
 npm run build
 npm run test:e2e
 npm run test:rls
+npm run test:clients:rls
+npm run test:vehicles:rls
+npm run test:services:rls
 ```
 
-`test:rls` usa o projeto de desenvolvimento configurado no `.env.local`, cria contas sintéticas e as remove ao final.
+Os comandos de teste RLS usam o projeto de desenvolvimento configurado no `.env.local`, criam dados sintéticos e os removem ao final.
 
 ## Documentação
 
@@ -74,6 +85,11 @@ npm run test:rls
 - Plano do sistema: `docs/superpowers/plans/2026-08-31-mundo-ar-implementation.md`.
 - Especificação de autenticação: `docs/superpowers/specs/2026-09-01-autenticacao-supabase-design.md`.
 - Plano de autenticação: `docs/superpowers/plans/2026-09-01-autenticacao-supabase-implementation.md`.
+- Especificação de clientes: `docs/superpowers/specs/2026-09-01-cadastro-clientes-design.md`.
+- Especificação de veículos: `docs/superpowers/specs/2026-09-06-cadastro-veiculos-design.md`.
+- Plano de veículos: `docs/superpowers/plans/2026-09-06-cadastro-veiculos-implementation.md`.
+- Especificação de serviços: `docs/superpowers/specs/2026-09-06-cadastro-servicos-design.md`.
+- Plano de serviços: `docs/superpowers/plans/2026-09-06-cadastro-servicos-implementation.md`.
 
 ## Branches
 

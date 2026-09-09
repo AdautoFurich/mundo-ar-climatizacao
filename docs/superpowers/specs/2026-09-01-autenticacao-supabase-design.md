@@ -6,7 +6,7 @@ Branch: `feature/autenticacao`
 
 ## 1. Objetivo
 
-Integrar o sistema Mundo Ar Climatização ao Supabase para oferecer autenticação por e-mail e senha, recuperação de acesso, sessões seguras, proteção das áreas privadas e autorização pelos perfis administrador, atendente e técnico.
+Integrar o sistema Mundo Ar Climatização ao Supabase para oferecer autenticação por e-mail e senha, recuperação de acesso, sessões seguras, proteção das áreas privadas e autorização pelos perfis administrador e atendente.
 
 O módulo não terá cadastro público. O primeiro administrador será criado por um procedimento local documentado e, depois disso, somente administradores poderão convidar e gerenciar funcionários.
 
@@ -27,7 +27,7 @@ O esquema do banco será mantido por migrações SQL versionadas. Segredos, senh
 - Renovação e encerramento da sessão.
 - Recuperação de senha por link enviado por e-mail.
 - Proteção das páginas e operações privadas.
-- Perfis administrador, atendente e técnico.
+- Perfis administrador e atendente.
 - Bloqueio de contas inativas.
 - Convite de funcionários pelo administrador.
 - Consulta, ativação e inativação de contas pelo administrador.
@@ -62,14 +62,7 @@ O esquema do banco será mantido por migrações SQL versionadas. Segredos, senh
 
 - Entra e sai do sistema.
 - Recupera a própria senha.
-- Acessa as áreas operacionais permitidas pelo sistema.
-- Não administra usuários.
-
-### 4.3 Técnico
-
-- Entra e sai do sistema.
-- Recupera a própria senha.
-- Acessa somente as áreas técnicas permitidas pelo sistema.
+- Acessa as áreas operacionais, inclusive diagnóstico e execução das ordens.
 - Não administra usuários.
 
 Nesta etapa, a matriz central de permissões estabelecerá a base reutilizada pelos módulos seguintes. Toda autorização crítica será confirmada no servidor e no banco, independentemente da visibilidade dos controles na interface.
@@ -82,7 +75,6 @@ O Supabase Auth será responsável pelas credenciais e sessões. A aplicação m
 
 - `administrador`
 - `atendente`
-- `tecnico`
 
 ### 5.2 Tabela de perfis de usuários
 
@@ -186,9 +178,9 @@ O cabeçalho exibirá nome, perfil e opção de encerrar a sessão. A navegaçã
 - Senha obrigatória no login.
 - Nova senha sujeita à política configurada no Supabase e confirmada no formulário.
 - Nome obrigatório no convite.
-- Perfil limitado aos três valores definidos.
+- Perfil limitado aos dois valores definidos.
 - Conta nova ativa por padrão, salvo decisão explícita do administrador.
-- Operações administrativas rejeitadas para atendente e técnico.
+- Operações administrativas rejeitadas para atendente.
 - Envios repetidos protegidos enquanto a operação estiver em andamento.
 
 ## 10. Tratamento de erros
@@ -245,7 +237,7 @@ O cabeçalho exibirá nome, perfil e opção de encerrar a sessão. A navegaçã
 - Login e logout de cada perfil.
 - Recuperação e atualização de senha.
 - Convite de um funcionário pelo administrador.
-- Bloqueio da administração de usuários para atendente e técnico.
+- Bloqueio da administração de usuários para atendente.
 - Bloqueio de uma conta inativada.
 
 As contas automatizadas usarão variáveis protegidas. Nenhuma senha de teste será incluída no repositório.
@@ -256,9 +248,9 @@ O módulo estará concluído quando:
 
 1. O projeto Supabase de desenvolvimento estiver configurado sem segredos versionados.
 2. O primeiro administrador puder ser criado por um procedimento documentado.
-3. Usuários ativos dos três perfis puderem entrar e sair do sistema.
+3. Usuários ativos dos dois perfis puderem entrar e sair do sistema.
 4. Áreas privadas rejeitarem usuários sem sessão.
-5. Operações administrativas forem bloqueadas para atendente e técnico na interface, no servidor e no banco.
+5. Operações administrativas forem bloqueadas para atendente na interface, no servidor e no banco.
 6. O administrador puder convidar, consultar, ativar e inativar funcionários.
 7. Um funcionário puder solicitar e concluir a recuperação da própria senha.
 8. Uma conta inativa não puder continuar usando o sistema.

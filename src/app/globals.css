@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Escala tipografica: 6 degraus. Nada abaixo de 11px. */
+@theme {
+  --text-2xs: 0.6875rem;
+  --text-2xs--line-height: 1rem;
+}
+
 :root {
   --brand: #102d3f;
   --brand-strong: #0a2231;
@@ -7,7 +13,7 @@
   --brand-accent: #66d2c9;
   --action: #0f766e;
   --action-strong: #0a625c;
-  --warning: #b86612;
+  --warning: #a85c0e;
   --warning-soft: #fff4df;
   --danger: #b42318;
   --success: #247a4d;
@@ -18,8 +24,10 @@
   --steel-strong: #aebbc4;
   --ink: #172731;
   --ink-muted: #5b6972;
-  --ink-faint: #77858e;
+  --ink-faint: #66747e;
   --focus: #087f8c;
+
+  color-scheme: light;
 }
 
 * {
@@ -34,7 +42,7 @@ body {
   margin: 0;
   background: var(--canvas);
   color: var(--ink);
-  font-family: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  font-family: var(--font-body), "Segoe UI", system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.5;
   text-rendering: optimizeLegibility;
@@ -47,7 +55,7 @@ summary {
 }
 
 .font-display {
-  font-family: "Arial Narrow", "Roboto Condensed", "Source Sans 3", sans-serif;
+  font-family: var(--font-display), "Arial Narrow", "Segoe UI", sans-serif;
 }
 
 .service-tag::before {
@@ -67,6 +75,90 @@ summary {
   background-size: 24px 24px;
 }
 
+/* Evita rolagem interna na navegação lateral em telas de notebook. */
+@media (min-width: 64rem) and (max-height: 53.125rem) {
+  .sidebar-desktop .sidebar-brand {
+    height: 6.5rem;
+  }
+
+  .sidebar-desktop .sidebar-brand-logo {
+    width: 7.5rem;
+  }
+
+  .sidebar-desktop .sidebar-navigation {
+    gap: 0.75rem;
+    padding-block: 0.75rem;
+  }
+
+  .sidebar-desktop .sidebar-navigation-heading {
+    margin-bottom: 0.25rem;
+  }
+
+  .sidebar-desktop .sidebar-navigation-list {
+    gap: 0.125rem;
+  }
+
+  .sidebar-desktop .sidebar-navigation-link {
+    min-height: 2.75rem;
+  }
+
+  .sidebar-desktop .sidebar-logout {
+    min-height: 2.25rem;
+  }
+
+  .sidebar-desktop .sidebar-footer {
+    padding-bottom: 0.5rem;
+  }
+
+  .sidebar-desktop .sidebar-environment {
+    padding: 0.625rem;
+  }
+}
+
+@media (min-width: 64rem) and (max-height: 45rem) {
+  .sidebar-desktop .sidebar-brand {
+    height: 5rem;
+  }
+
+  .sidebar-desktop .sidebar-brand-logo {
+    width: 5.75rem;
+  }
+
+  .sidebar-desktop .sidebar-navigation {
+    gap: 0.375rem;
+    padding-block: 0.375rem;
+  }
+
+  .sidebar-desktop .sidebar-navigation-heading {
+    margin-bottom: 0.125rem;
+  }
+
+  .sidebar-desktop .sidebar-navigation-list {
+    gap: 0;
+  }
+
+  .sidebar-desktop .sidebar-navigation-link {
+    min-height: 2.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .sidebar-desktop .sidebar-logout {
+    min-height: 2.25rem;
+    font-size: 0.8125rem;
+  }
+
+  .sidebar-desktop .sidebar-footer {
+    padding-bottom: 0.375rem;
+  }
+
+  .sidebar-desktop .sidebar-environment {
+    padding: 0.5rem;
+  }
+
+  .sidebar-desktop .sidebar-environment-copy {
+    display: none;
+  }
+}
 /* Mantém a composição do acesso inteira em alturas comuns de notebook. */
 @media (min-width: 64rem) {
   .auth-shell:has(.auth-login-form),
@@ -256,5 +348,50 @@ summary {
     transition-duration: 0.01ms !important;
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
+  }
+}
+
+@media print {
+  @page {
+    size: landscape;
+    margin: 12mm;
+  }
+
+  body,
+  html {
+    background: white;
+  }
+
+  .sidebar-desktop,
+  .app-header,
+  .report-no-print {
+    display: none !important;
+  }
+
+  .app-layout-offset {
+    padding-left: 0 !important;
+  }
+
+  .report-print-only,
+  .report-table {
+    display: block !important;
+  }
+
+  .report-print-area {
+    color: #172731;
+  }
+
+  .report-table,
+  .report-print-area dl > div {
+    box-shadow: none !important;
+  }
+
+  .report-table table {
+    min-width: 0 !important;
+  }
+
+  .report-table a {
+    color: inherit !important;
+    text-decoration: none !important;
   }
 }

@@ -60,11 +60,7 @@ Representa o proprietário ou responsável. Possui acesso completo, administra u
 
 ### 3.2 Atendente
 
-Cadastra e consulta clientes e veículos; abre ordens; registra autorizações; acompanha o andamento; prepara a entrega; e consulta relatórios operacionais. Pode consultar serviços, mas não administra usuários nem altera as regras globais.
-
-### 3.3 Técnico
-
-Consulta os dados necessários da ordem, do cliente e do veículo; registra diagnóstico; informa serviços executados; e conclui a etapa técnica. Não acessa a administração de usuários nem os relatórios gerenciais na primeira versão.
+Cadastra e consulta clientes e veículos; abre ordens; registra diagnósticos e autorizações; informa os serviços executados; conclui a execução; acompanha o andamento; prepara a entrega; e consulta relatórios operacionais. Pode consultar serviços, mas não administra usuários nem altera as regras globais.
 
 O cliente não é ator direto porque não acessará o sistema nesta versão. Sua autorização será registrada por um funcionário.
 
@@ -104,7 +100,7 @@ O atendente seleciona ou cadastra cliente e veículo e registra reclamação, qu
 
 ### 5.2 Em diagnóstico
 
-O técnico registra testes, defeitos encontrados e recomendações. Os itens sugeridos para o orçamento podem ser adicionados a partir do cadastro de serviços, com possibilidade de ajustar descrição, quantidade e valor praticado.
+O atendente registra testes, defeitos encontrados e recomendações. Os itens sugeridos para o orçamento podem ser adicionados a partir do cadastro de serviços, com possibilidade de ajustar descrição, quantidade e valor praticado.
 
 ### 5.3 Aguardando aprovação
 
@@ -112,7 +108,7 @@ O sistema calcula o total do orçamento. O atendente registra a decisão do clie
 
 ### 5.4 Em execução
 
-Somente itens autorizados podem ser marcados como executados. O técnico registra observações da execução e a conclusão técnica.
+Somente itens autorizados podem ser marcados como executados. O atendente registra observações da execução e a conclusão técnica.
 
 ### 5.5 Pronta
 
@@ -153,7 +149,7 @@ erDiagram
 | veiculos | Manter os veículos vinculados aos clientes | id, cliente_id, placa, marca, modelo, ano, cor, combustível, observações, ativo |
 | servicos | Formar o catálogo de serviços da oficina | id, nome, descrição, categoria, valor_base, ativo |
 | usuarios | Complementar a conta do Supabase Auth com dados do funcionário | id_auth, nome, perfil, ativo, criado_em |
-| ordens_servico | Representar todo o atendimento do veículo | id, numero, cliente_id, veiculo_id, atendente_id, tecnico_id, status, reclamação, diagnóstico, quilometragem, datas, totais, pagamento, observações |
+| ordens_servico | Representar todo o atendimento do veículo | id, numero, cliente_id, veiculo_id, atendente_id, executor_id, status, reclamação, diagnóstico, quilometragem, datas, totais, pagamento, observações |
 | itens_ordem | Registrar serviços orçados, autorizados e executados | id, ordem_id, servico_id, descrição, quantidade, valor_unitario, subtotal, autorizado, executado |
 | historico_status | Auditar o ciclo da ordem | id, ordem_id, usuario_id, status_anterior, status_novo, ocorrido_em, justificativa |
 
@@ -163,7 +159,7 @@ O item da ordem guarda sua própria descrição e seu valor. Assim, alterações
 
 ### 7.1 Ordens por período
 
-Filtros: data inicial, data final, status, cliente, veículo e técnico.  
+Filtros: data inicial, data final, status, cliente, veículo e responsável pela execução.
 Saída: número, datas, cliente, veículo, status, responsáveis e valor total.  
 Resumo: quantidade de ordens e soma dos valores no período.
 
@@ -185,7 +181,7 @@ Os três relatórios serão visualizados em tabela e terão versão apropriada p
 
 ```mermaid
 flowchart LR
-    U[Administrador\nAtendente\nTécnico] --> N[Next.js + React + TypeScript]
+    U[Administrador\nAtendente] --> N[Next.js + React + TypeScript]
     N --> V[Formulários e validação\nReact Hook Form + Zod]
     N --> S[Camada de servidor\nregras e autorização]
     S --> A[Supabase Auth]
@@ -309,7 +305,7 @@ A direção visual usará base clara, navegação em azul-escuro, cor de destaqu
 
 O sistema estará pronto para demonstração quando:
 
-1. Os três perfis conseguirem entrar e visualizarem somente as operações autorizadas.
+1. Os dois perfis conseguirem entrar e visualizarem somente as operações autorizadas.
 2. Clientes, veículos e serviços puderem ser cadastrados, consultados, alterados e inativados.
 3. Uma ordem puder percorrer o fluxo aprovado, mantendo seu histórico.
 4. Autorização, recusa, execução e entrega ficarem registradas.
