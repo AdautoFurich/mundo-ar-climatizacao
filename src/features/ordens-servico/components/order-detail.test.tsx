@@ -111,7 +111,16 @@ describe("detalhes da ordem de serviço", () => {
   });
 
   it("organiza entrada, diagnóstico, orçamento, execução e entrega", () => {
-    render(<OrderDetail order={order} />);
+    render(
+      <OrderDetail
+        order={order}
+        quotePdfAction={
+          <a href={`/ordens-servico/${order.id}/orcamento`}>
+            Baixar orçamento em PDF
+          </a>
+        }
+      />,
+    );
 
     expect(screen.getByRole("heading", { name: "Entrada do veículo" })).toBeInTheDocument();
     expect(screen.getByText("84.520 km")).toBeInTheDocument();
@@ -120,6 +129,10 @@ describe("detalhes da ordem de serviço", () => {
     expect(screen.getByText("Baixa pressão no circuito e filtro saturado.")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Orçamento e autorizações" })).toBeInTheDocument();
     expect(screen.getByText("Higienização do sistema")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Baixar orçamento em PDF" })).toHaveAttribute(
+      "href",
+      `/ordens-servico/${order.id}/orcamento`,
+    );
     expect(screen.getByText("1 item autorizado aguardando execução.")).toBeInTheDocument();
     expect(screen.getByRole("heading", { name: "Entrega" })).toBeInTheDocument();
     expect(screen.getByText("Entrega ainda não registrada.")).toBeInTheDocument();

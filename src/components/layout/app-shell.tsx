@@ -1,6 +1,5 @@
 import {
   BarChart3,
-  CalendarDays,
   CarFront,
   ChevronDown,
   ClipboardList,
@@ -8,8 +7,6 @@ import {
   LogOut,
   Menu,
   Search,
-  Settings,
-  Stethoscope,
   Users,
   Wrench,
 } from "lucide-react";
@@ -25,15 +22,21 @@ import { cn } from "@/lib/utils";
 const operationNavigation = [
   { label: "Visão geral", icon: Gauge, href: "/" },
   { label: "Ordens de serviço", icon: ClipboardList, href: "/ordens-servico" },
-  { label: "Diagnósticos", icon: Stethoscope },
+] as const;
+
+const registrationNavigation = [
   { label: "Clientes", icon: Users, href: "/clientes" },
   { label: "Veículos", icon: CarFront, href: "/veiculos" },
   { label: "Serviços", icon: Wrench, href: "/servicos" },
 ] as const;
 
 const managementNavigation = [
-  { label: "Relatórios", icon: BarChart3, href: "/relatorios/ordens-periodo" },
-  { label: "Agenda", icon: CalendarDays },
+  {
+    label: "Relatórios",
+    icon: BarChart3,
+    href: "/relatorios/ordens-periodo",
+    activePath: "/relatorios",
+  },
 ] as const;
 
 const roleLabel = {
@@ -52,17 +55,51 @@ function initials(name: string) {
   );
 }
 
-function NavigationGroup({
+type NavigationItem = {
+  label: string;
+  icon: typeof Gauge;
+  href: string;
+  activePath?: string;
+};
+
+function isCurrentPath(currentPath: string, href: string) {
+  return href === "/"
+    ? currentPath === href
+    : currentPath === href || currentPath.startsWith(`${href}/`);
+}
+
+function NavigationLink({
   currentPath,
-  items,
-  label,
+  item,
 }: {
   currentPath: string;
-  items: ReadonlyArray<{
-    label: string;
-    icon: typeof Gauge;
-    href?: string;
-  }>;
+  item: NavigationItem;
+}) {
+  const Icon = item.icon;
+  const active = isCurrentPath(currentPath, item.activePath ?? item.href);
+
+  return (
+    <Link
+      aria-current={active ? "page" : undefined}
+      className={cn(
+        "sidebar-navigation-link relative flex min-h-11 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300",
+        active
+          ? "border-l-2 border-teal-300 bg-teal-500/25 font-semibold text-white"
+          : "text-slate-200 hover:bg-white/8 hover:text-white",
+      )}
+      href={item.href}
+    >
+      <Icon aria-hidden="true" className="size-[1.1rem] shrink-0" />
+      <span>{item.label}</span>
+    </Link>
+  );
+}
+
+function NavigationGroup({
+  children,
+  label,
+}: {
+  children: ReactNode;
   label: string;
 }) {
   return (
@@ -72,45 +109,7 @@ function NavigationGroup({
       </p>
       <nav aria-label={label}>
         <ul className="sidebar-navigation-list grid gap-1">
-          {items.map((item) => {
-            const Icon = item.icon;
-            const active =
-              item.href === "/"
-                ? currentPath === "/"
-                : Boolean(item.href && currentPath.startsWith(item.href));
-            const classes = cn(
-              "sidebar-navigation-link relative flex min-h-10 items-center gap-3 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-teal-300",
-              active
-                ? "border-l-2 border-teal-300 bg-teal-500/25 text-white"
-                : item.href
-                  ? "text-slate-200 hover:bg-white/8 hover:text-white"
-                  : "cursor-not-allowed text-slate-300/75",
-            );
-
-            return (
-              <li key={item.label}>
-                {item.href ? (
-                  <Link
-                    aria-current={active ? "page" : undefined}
-                    className={classes}
-                    href={item.href}
-                  >
-                    <Icon aria-hidden="true" className="size-[1.1rem] shrink-0" />
-                    {item.label}
-                  </Link>
-                ) : (
-                  <span
-                    aria-disabled="true"
-                    className={classes}
-                    title="Módulo planejado para uma próxima etapa"
-                  >
-                    <Icon aria-hidden="true" className="size-[1.1rem] shrink-0" />
-                    {item.label}
-                  </span>
-                )}
-              </li>
-            );
-          })}
+          {children}
         </ul>
       </nav>
     </div>
@@ -124,13 +123,6 @@ function SidebarContent({
   currentPath: string;
   user: CurrentUser;
 }) {
-  const configurationItems = can(user.role, "usuarios:gerenciar")
-    ? [
-        { label: "Usuários", icon: Users, href: "/usuarios" },
-        { label: "Configurações", icon: Settings },
-      ]
-    : [{ label: "Configurações", icon: Settings }];
-
   return (
     <>
       <div className="sidebar-brand flex h-[8.5rem] shrink-0 items-center justify-center border-b border-white/10">
@@ -138,28 +130,40 @@ function SidebarContent({
       </div>
 
       <div className="sidebar-navigation flex flex-1 flex-col gap-5 overflow-y-auto px-3 py-5 lg:overflow-visible">
-        <NavigationGroup
-          currentPath={currentPath}
-          items={operationNavigation}
-          label="Operação da oficina"
-        />
-        <div className="sidebar-navigation-section border-t border-white/8 pt-5">
-          <NavigationGroup
-            currentPath={currentPath}
-            items={managementNavigation}
-            label="Gestão"
-          />
-        </div>
-        <div className="sidebar-navigation-section border-t border-white/8 pt-5">
-          <NavigationGroup
-            currentPath={currentPath}
-            items={configurationItems}
-            label="Configurações"
-          />
-        </div>
+        <NavigationGroup label="Oficina">
+          {operationNavigation.map((item) => (
+            <li key={item.href}>
+              <NavigationLink currentPath={currentPath} item={item} />
+            </li>
+          ))}
+        </NavigationGroup>
+        <NavigationGroup label="Cadastros">
+          {registrationNavigation.map((item) => (
+            <li key={item.href}>
+              <NavigationLink currentPath={currentPath} item={item} />
+            </li>
+          ))}
+        </NavigationGroup>
+        <NavigationGroup label="Gestão">
+          {managementNavigation.map((item) => (
+            <li key={item.href}>
+              <NavigationLink currentPath={currentPath} item={item} />
+            </li>
+          ))}
+        </NavigationGroup>
+        {can(user.role, "usuarios:gerenciar") ? (
+          <NavigationGroup label="Administração">
+            <li>
+              <NavigationLink
+                currentPath={currentPath}
+                item={{ label: "Usuários", icon: Users, href: "/usuarios" }}
+              />
+            </li>
+          </NavigationGroup>
+        ) : null}
       </div>
 
-      <div className="sidebar-footer shrink-0 space-y-2 px-3 pb-5">
+      <div className="sidebar-footer shrink-0 space-y-2 border-t border-white/10 px-3 pb-5 pt-3">
         <div className="sidebar-environment rounded-lg border border-white/20 bg-white/[0.035] p-3">
           <div className="flex items-start gap-2.5">
             <div

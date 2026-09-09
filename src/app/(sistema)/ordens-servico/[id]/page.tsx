@@ -1,4 +1,4 @@
-import { ArrowLeft, RefreshCw, TriangleAlert } from "lucide-react";
+import { ArrowLeft, FileDown, RefreshCw, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -170,6 +170,19 @@ export default async function ServiceOrderDetailsPage({
                 ) : undefined
               }
               order={order}
+              quotePdfAction={
+                order.items.some((item) => !item.removedAt) ? (
+                  <Link
+                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border bg-white px-4 text-sm font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--surface-subtle)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)] focus-visible:ring-offset-2"
+                    download
+                    href={`/ordens-servico/${order.id}/orcamento`}
+                    prefetch={false}
+                  >
+                    <FileDown aria-hidden="true" className="size-4" />
+                    Baixar orçamento em PDF
+                  </Link>
+                ) : undefined
+              }
               quoteEditor={
                 canEditQuote ? (
                   <QuoteEditor

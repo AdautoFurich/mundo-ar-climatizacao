@@ -124,6 +124,7 @@ export function OrderDetail({
   diagnosisForm,
   executionPanel,
   order,
+  quotePdfAction,
   quoteEditor,
 }: {
   approvalPanel?: React.ReactNode;
@@ -131,6 +132,7 @@ export function OrderDetail({
   diagnosisForm?: React.ReactNode;
   executionPanel?: React.ReactNode;
   order: ServiceOrderDetails;
+  quotePdfAction?: React.ReactNode;
   quoteEditor?: React.ReactNode;
 }) {
   const items = order.items.filter((item) => !item.removedAt);
@@ -203,6 +205,11 @@ export function OrderDetail({
             </dl>
             {order.discount > 0 && <p className="mt-3 text-right text-sm text-[var(--ink-muted)]">Desconto aplicado: <strong className="text-[var(--ink)]">{formatOrderMoney(order.discount)}</strong></p>}
           </>
+        )}
+        {quotePdfAction && (
+          <div className="mt-4 flex justify-end border-t pt-4">
+            {quotePdfAction}
+          </div>
         )}
         {approvalPanel && <div className="mt-4">{approvalPanel}</div>}
         {order.approvals.length > 0 && (
