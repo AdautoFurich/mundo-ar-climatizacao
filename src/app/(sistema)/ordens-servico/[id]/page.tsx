@@ -1,4 +1,4 @@
-import { ArrowLeft, FileDown, RefreshCw, TriangleAlert } from "lucide-react";
+import { ArrowLeft, RefreshCw, TriangleAlert } from "lucide-react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 
@@ -12,6 +12,7 @@ import { OrderSummary } from "@/features/ordens-servico/components/order-summary
 import { OrderStatusAction } from "@/features/ordens-servico/components/status-action";
 import { OrderTimeline } from "@/features/ordens-servico/components/timeline";
 import { QuoteEditor } from "@/features/ordens-servico/components/quote-editor";
+import { QuoteShareActions } from "@/features/ordens-servico/components/quote-share-actions";
 import {
   getServiceOrderById,
   listActiveOrderServices,
@@ -172,15 +173,16 @@ export default async function ServiceOrderDetailsPage({
               order={order}
               quotePdfAction={
                 order.items.some((item) => !item.removedAt) ? (
-                  <Link
-                    className="inline-flex min-h-11 items-center justify-center gap-2 rounded-lg border bg-white px-4 text-sm font-semibold text-[var(--ink)] transition-colors hover:bg-[var(--surface-subtle)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--focus)] focus-visible:ring-offset-2"
-                    download
-                    href={`/ordens-servico/${order.id}/orcamento`}
-                    prefetch={false}
-                  >
-                    <FileDown aria-hidden="true" className="size-4" />
-                    Baixar orçamento em PDF
-                  </Link>
+                  <QuoteShareActions
+                    clientName={order.clientName}
+                    clientPhone={order.clientPhone}
+                    fileName={`orcamento-os-${String(order.number).padStart(4, "0")}.pdf`}
+                    orderNumber={order.number}
+                    quoteUrl={`/ordens-servico/${order.id}/orcamento`}
+                    quotedTotal={order.quotedTotal}
+                    vehicleLabel={order.vehicleLabel}
+                    vehiclePlate={order.vehiclePlate}
+                  />
                 ) : undefined
               }
               quoteEditor={
